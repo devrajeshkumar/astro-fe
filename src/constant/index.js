@@ -239,7 +239,7 @@ export const GNS_FEED = {
 
 export const BOTTOMNAV = [
   {
-    label: "Home",
+    label: "होम",
     link: `${import.meta.env.WEBAPP_BASE_URL}`,
     icon: "HomeIcon",
     activeIcon: "HomeIconRed",
@@ -248,7 +248,7 @@ export const BOTTOMNAV = [
     active: false,
   },
   {
-    label: "News",
+    label: "न्यूज",
     link: `${import.meta.env.WEBAPP_BASE_URL}/news`,
     icon: "newsIconBlack",
     activeIcon: "newsIconRed",
@@ -257,7 +257,7 @@ export const BOTTOMNAV = [
     active: false,
   },
   {
-    label: "Live TV",
+    label: "लाइव टीवी",
     link: `${import.meta.env.WEBAPP_BASE_URL}/live-tv`,
     icon: "LiveTvIcon",
     activeIcon: "LiveTvIconRed",
@@ -266,7 +266,7 @@ export const BOTTOMNAV = [
     active: false,
   },
   {
-    label: "Web Stories",
+    label: "वेब स्टोरी",
     link: `${import.meta.env.WEBAPP_BASE_URL}/web-stories`,
     icon: "storyWithoutShadowBlack",
     activeIcon: "storyWithoutShadowRed",
@@ -275,7 +275,7 @@ export const BOTTOMNAV = [
     active: false,
   },
   {
-    label: "Market",
+    label: "मार्केट",
     link: `${import.meta.env.WEBAPP_BASE_URL}/market-overview`,
     icon: "MarketIcon",
     activeIcon: "MarketIconRed",
