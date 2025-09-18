@@ -1,56 +1,120 @@
 ---
-import style from "./Accordian.module.scss";
+import style from "@components/common/accordian/Accordian.module.scss";
 import Typography from "../widgets/typography/Typography.astro";
 
-const { title, children, closePrev = false, showChildren } = Astro.props;
+export interface Props {
+  instanceId?: string;
+  title?: string;
+  closePrev?: boolean;
+  showChildren?: boolean;
+  changeStyle?: string;
+  inLineStyle?: Record<string, string>;
+  headerInLineStyle?: Record<string, string>;
+  contentInLineStyle?: Record<string, string>;
+  isDarkLayout?: boolean;
+  isToggleButton?: boolean;
+  togglePosition?: 'left' | 'right';
+  animationDuration?: number;
+  defaultOpen?: boolean;
+}
+
+const {
+  instanceId = "default",
+  title = "",
+  closePrev = false,
+  showChildren = true,
+  changeStyle = "",
+  inLineStyle = {},
+  headerInLineStyle = {},
+  contentInLineStyle = {},
+  isDarkLayout = false,
+  isToggleButton = true,
+  togglePosition = 'right',
+  animationDuration = 300,
+  defaultOpen = false
+} = Astro.props;
+
+// Unique IDs
+const accordionId = `accordion_${instanceId}`;
+const triggerId = `accordionTrigger_${instanceId}`;
+const contentId = `accordionContent_${instanceId}`;
 ---
 
-<div class={style.accordion} data-accordion>
-  <div class={style["accordion-header"]} data-accordion-trigger>
-    <slot name="header" />
+<div 
+  id={accordionId}
+  class={`${style.accordion} ${changeStyle ? style[changeStyle] : ""} ${defaultOpen ? style.open : ""}`} 
+  data-accordion
+  data-instance={instanceId}
+  style={inLineStyle}
+>
+  <div 
+    id={triggerId}
+    class={style["accordion-header"]} 
+    data-accordion-trigger
+    style={headerInLineStyle}
+  >
+    <slot name="header">
+      {title && <Typography variant="h3">{title}</Typography>}
+    </slot>
     {
-      showChildren ? (
-        <button class={style["accordion-toggle"]} aria-label="Toggle accordion">
+      showChildren && isToggleButton ? (
+        <button 
+          class={`${style["accordion-toggle"]} ${style[`toggle-${togglePosition}`]}`} 
+          aria-label="Toggle accordion"
+          aria-expanded={defaultOpen}
+          aria-controls={contentId}
+        >
           <span class={style["icon-plus"]}>+</span>
-          <span class={style["icon-close"]}>×</span>
+          <span class={style["icon-close"]}>-</span>
         </button>
       ) : null
     }
   </div>
   {
     showChildren ? (
-      <div class={style["accordion-content"]} data-accordion-content>
+      <div 
+        id={contentId}
+        class={style["accordion-content"]} 
+        data-accordion-content
+        style={contentInLineStyle}
+        role="region"
+        aria-labelledby={triggerId}
+      >
         <div class={style["accordion-body"]}>
-          <slot name="body" />
+          <slot name="body">
+            <slot />
+          </slot>
         </div>
       </div>
     ) : null
   }
 </div>
 
-<script define:vars={{ closePrev, style }}>
-  document.addEventListener("DOMContentLoaded", () => {
-    const accordions = document.querySelectorAll("[data-accordion]");
-
-    accordions.forEach((accordion) => {
-      const trigger = accordion.querySelector("[data-accordion-trigger]");
-
-      trigger.addEventListener("click", () => {
-        const isOpen = accordion.classList.contains(style["open"]);
-
-        // Close all accordions first
-        if (closePrev) {
-          accordions.forEach((acc) => acc.classList.remove(style["open"]));
-        }
-
-        // If current accordion wasn't open, open it
-        if (!isOpen) {
-          accordion.classList.add(style["open"]);
-        } else {
-          accordion.classList.remove(style["open"]);
-          accordion.classList.add(style["close"]);
-        }
+<script define:vars={{ 
+  instanceId, 
+  closePrev, 
+  animationDuration,
+  defaultOpen,
+  style
+}}>
+(function() {
+  function initAccordion() {
+    if (window.AccordionManager) {
+      window.AccordionManager.init(instanceId, {
+        closePrev,
+        animationDuration,
+        defaultOpen,
+        cssModules: style // Pass the CSS module styles
       });
-    });
-  });
+    } else {
+      setTimeout(initAccordion, 50);
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAccordion);
+  } else {
+    initAccordion();
+  }
+})();
 </script>

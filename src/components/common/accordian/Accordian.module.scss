@@ -1,6 +1,7 @@
 .accordion {
   overflow: hidden;
   transition: all 0.3s ease;
+  border-radius: 8px;
 
   &-header {
     padding: 0;
@@ -8,9 +9,17 @@
     border: none;
     width: 100%;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     > * {
       padding-right: 20px;
+    }
+
+    &:focus-within {
+      outline: 2px solid #007acc;
+      outline-offset: 2px;
     }
   }
 
@@ -30,7 +39,15 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    right: -10px;
+    flex-shrink: 0;
+
+    &.toggle-left {
+      left: -10px;
+    }
+
+    &.toggle-right {
+      right: -10px;
+    }
 
     .icon-close {
       display: none;
@@ -45,14 +62,21 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    
+    &[aria-hidden="false"] {
+      overflow: visible;
+    }
   }
 
   &-body {
     padding: 0;
+    margin-top: 16px;
   }
 
   &.open {
     .accordion-toggle {
+      transform: translateY(-50%) rotate(45deg);
+
       .icon-close {
         display: block;
       }
@@ -63,7 +87,71 @@
     }
 
     .accordion-content {
-      max-height: 100%;
+      max-height: 1000px; // Adjust based on your content
+      overflow: visible;
+    }
+  }
+
+  // Close state with animation
+  &.close {
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+    }
+  }
+
+  // Dark mode support
+  &.dark-layout {
+    background-color: #1a1a1a;
+    color: #ffffff;
+
+    .accordion-toggle {
+      color: #ffffff;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  // Custom animation durations
+  &.fast {
+    transition: all 0.15s ease;
+    
+    .accordion-content {
+      transition: max-height 0.15s ease;
+    }
+  }
+
+  &.slow {
+    transition: all 0.5s ease;
+    
+    .accordion-content {
+      transition: max-height 0.5s ease;
+    }
+  }
+
+  // Accessibility improvements
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    
+    .accordion-content {
+      transition: none;
+    }
+    
+    .accordion-toggle {
+      transition: none;
+    }
+  }
+}
+
+// Multiple accordion container
+.accordion-group {
+  .accordion {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    &:last-child {
+      border-bottom: none;
     }
   }
 }

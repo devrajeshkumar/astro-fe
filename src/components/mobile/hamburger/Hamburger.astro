@@ -87,7 +87,7 @@ const groupedDataNavigation = groupMenuData(data);
             className={`${style.categoryHeader} ${style["active"]}`}
           >
             <SvgIcon IconName={"HomeIcon"} width="21" height="20" />
-            <h3 class={style.categoryTitle}>Home</h3>
+            <h3 class={style.categoryTitle}>होम</h3>
           </Link>
         </li>
         <!-- <li class={style.categoryPremium}>
@@ -118,7 +118,7 @@ const groupedDataNavigation = groupMenuData(data);
               </div>
               <ul class={style.subMenu}>
                 {category.items.map((item) => (
-                  <Accordian showChildren={item?.child?.length}>
+                  <Accordian showChildren={item?.children?.length > 0} title={item?.title} instanceId={item?.title} closePrev={true}>
                     <Link
                       slot="header"
                       link={`${getDomain()}/${item?.seopath}`}

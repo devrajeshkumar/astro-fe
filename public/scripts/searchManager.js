@@ -7,7 +7,7 @@
       instances: new Map(),
       
       // API Configuration
-      API_URL: "https://api.etnownews.com/api/search?row=20&start=0&origin=desktop&channel_id=382&searchterms=",
+      API_URL: "https://apihindi.etnownews.com/api/search?row=20&start=0&origin=desktop&channel_id=386&searchterms=",
       
       // Initialize a search instance
       init: function(instanceId, options = {}) {

@@ -5,7 +5,7 @@ import TopNavigation from "../topNavigation/TopNavigation.astro";
 import Navigation from "../navigation/Navigation.astro";
 import EmblaSlider from "@components/common/slider/EmblaSlider.astro";
 
-const navData = await fetch("https://api.etnownews.com/api/getnavigation?msid=ALL&channel_id=382");
+const navData = await fetch("https://apihindi.etnownews.com/api/getnavigation?msid=ALL&channel_id=386");
 const navDataJson = await navData.json();
 const { pageTarget } = Astro.props;
 ---

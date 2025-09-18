@@ -149,15 +149,14 @@ const footerCompanyMenu = data?.response?.[0]?.data;
         ))
       }
     </ul>
-
     <div class={style["footer-menu"]}>
       {
-        footerMenu.map((section, sectionIndex) => {
+        footerMenu.map((section : any, sectionIndex : number) => {
           const title = section?.title;
           const links = section?.children;
 
           return (
-            <Accordian showChildren={links?.length} closePrev={true}>
+            <Accordian showChildren={section?.children?.length > 0} title={section?.title} instanceId={`${sectionIndex}-${section?.title}`} closePrev={true}>
               <Link
                 slot="header"
                 link={section?.href}

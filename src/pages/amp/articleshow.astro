@@ -1,10 +1,10 @@
 ---
-import AMPLayout from "@layouts/amp/Layout.astro"
+import AMPLayout from "../../layouts/amp/Layout.astro";
 
 const values = Astro.url.searchParams;
 const msid = values.get("id");
 const articleData = await fetch(
-    `https://api.etnownews.com/request/articleshow?origin=amp&msid=${msid}&channel_id=382`,
+    `https://apihindi.etnownews.com/request/articleshow?origin=amp&msid=${msid}&channel_id=386`,
 );
 const app = await articleData.json();
 ---

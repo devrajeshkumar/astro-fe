@@ -16,7 +16,7 @@ function ampIntegration() {
   };
 }
 
-let config = {
+const config = {
   output: "server",
   adapter: node({
     mode: "standalone",
@@ -40,9 +40,14 @@ let config = {
       },
     },
     css: {
+      modules: {
+        generateScopedName: isProd
+          ? "[hash:base64:6]"
+          : "[name]__[local]___[hash:base64:6]",
+      },
       preprocessorOptions: {
         scss: {
-          // outputStyle: "compressed", 
+          outputStyle: "compressed", 
           additionalData: `@use "src/styles/_mixins-new.scss" as *;`,
         },
       },
@@ -57,13 +62,5 @@ let config = {
     },
   },
 };
-
-if(isProd){
-    config.css= {
-      modules: {
-        generateScopedName: "[hash:base64:6]",
-      },
-    }
-}
 
 export default defineConfig(config);
