@@ -136,7 +136,7 @@ canonical === '/market-in-minutes/' ? (
   />
 )}
 
-{!is404 && isAmp && (seoObject.amplink || seoObject.amphtml) && (
+{!is404 && !isAmp && (seoObject.amplink || seoObject.amphtml) && (
   <link rel="amphtml" href={seoObject.amphtml} />
 )}
 {metaTags.map(({ tagName, attributes }) => {
