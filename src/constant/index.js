@@ -387,3 +387,5 @@ export const JOIN_US_LINK = {
 export const HDFC_CTR = {
   link: "https://docs.google.com/forms/d/e/1FAIpQLSeVvQ0d47nh8kfkcL7jwK3CPCLXLoJauxmIiVJfDAd5GXVYpg/viewform",
 };
+export const isValidUrlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+export const ET_HINDI_LOGO_MSID = 111599358;

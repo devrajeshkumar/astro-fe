@@ -5,6 +5,7 @@ import Link from "@components/common/link/Link.astro";
 import SvgIcon from "@components/common/svg/SvgIcon.astro";
 import Navigation from "@components/mobile/navigation/Navigation.astro";
 import Hamburger from "@components/mobile/hamburger/Hamburger.astro";
+import SiteNavigationElement from "@components/common/seo/schema/SiteNavigationElement.astro";
 
 const navData = await fetch(
   "https://apihindi.etnownews.com/api/getnavigation?msid=ALL&channel_id=386"
@@ -70,6 +71,7 @@ const navDataJson = await navData.json();
     </button>
   </div>
 </header>
+<SiteNavigationElement data={navDataJson}/>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

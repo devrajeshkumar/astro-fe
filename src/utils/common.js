@@ -602,3 +602,12 @@ export const processReadingTime = (data = {}) => {
   const time = wordCount ? Math.ceil(wordCount / 200) : 0;
   return time;
 };
+
+export const getSEOFriendlyDate = (tmstmp) => {
+  let data = "null"
+  if (!tmstmp) {
+    return "";
+  }
+
+  return `${dayjs.tz(Number(tmstmp), "Asia/Calcutta").format()}`;
+};

@@ -19,7 +19,7 @@ import KeywordTags from "@components/common/widgets/keywordTags/KeywordTags.astr
 import BreadCrumb from "@components/common/breadCrumb/BreadCrumb.astro";
 import LatestNews from "@components/common/latestNews/LatestNews.astro";
 import RelatedNews from "@components/common/relatedNews/RelatedNews.astro";
-import { getDomain } from "@utils/common";
+import { getDomain, getUrl } from "@utils/common";
 import YoutubeEmbed from "@components/common/youtubeEmbed/YoutubeEmbed.astro";
 import QuotesWidget from "@components/common/widgets/htmlQuotes/QuotesWidget.astro";
 import MultiVideoPlayer from "@components/reactComponents/multiVideoPlayer/MultiVideoPlayer";
@@ -34,12 +34,16 @@ import ScrollHideButtons from "@components/common/buttons/ScrollHideButtons.astr
 import ShareIcon from "../socialShare/ShareIcon.astro";
 import { processReadingTime } from "@utils/common";
 import SubscribeWithEmail from "@components/common/subscribeWithEmail/SubscribeWithEmail.astro";
+import WebPageSchema from "@components/common/seo/schema/WebPageSchema.astro";
+import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.astro";
 const { category, msid, app } = Astro.props;
 
 const mainData = app?.response?.sections?.article_show?.data?.[0];
 const ads = app?.response?.ads;
 ---
 
+<WebPageSchema data={mainData} pathname={getUrl(mainData)} />
+<NewsArticleSchema data={mainData} pathname={getUrl(mainData)} />
 <ContainerBox inLineStyle={{ marginBottom: "7px" }}>
   <CategoryName
     categoryName={category?.split("-").join(" ") ||
@@ -203,7 +207,11 @@ const ads = app?.response?.ads;
 <OneLiner />
 <BreadCrumb isWrap={true} category="news" />
 <RelatedNews data={mainData?.editorpicks} />
-<ShareIcon mainData={mainData} type={"BOTTOM_SHARE_ICONS"} followus="ET_HINDI" />
+<ShareIcon
+  mainData={mainData}
+  type={"BOTTOM_SHARE_ICONS"}
+  followus="ET_HINDI"
+/>
 <SubscribeWithEmail />
 <MgIdComponent
   scriptID={CONST.MGID_ADD_5X5}

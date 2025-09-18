@@ -1,0 +1,49 @@
+---
+import { isValidUrlRegex } from "@constant/index";
+import { getDomain } from "@utils/common";
+import { removeHtmlTags } from "@utils/common";
+
+const { data, pathname } = Astro.props;
+
+let headline = "";
+if (data && data.title) {
+  headline = data.title.replace(/["]/gi, "").substr(0, 110);
+}
+
+let des = "";
+if (data && data.synopsis) {
+  des = removeHtmlTags(data.synopsis);
+} else {
+  des = removeHtmlTags(data.text);
+}
+const testUrl = new RegExp(isValidUrlRegex);
+const url =
+  data && data?.overridelink && testUrl.test(data?.overridelink)
+    ? `${data?.overridelink}`
+    : getDomain() + pathname;
+const keywords =
+  data && data.keywords && data.keywords.length > 0 ? data.keywords : [];
+let jsonListKeywords = "";
+if (Array.isArray(keywords)) {
+  jsonListKeywords = keywords.reduce((result, item) => {
+    return `${result}${item.name},`;
+  }, "");
+} else {
+  jsonListKeywords = keywords;
+}
+
+const webpage = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: headline,
+  description: des,
+  keywords: jsonListKeywords,
+  url: url,
+};
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(webpage)}
+  slot="head"
+/>

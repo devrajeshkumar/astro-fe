@@ -1,0 +1,182 @@
+---
+import {
+  getSEOFriendlyDate,
+  getDomain,
+  getNewImageUrl,
+  removeHtmlTags,
+} from "@utils/common";
+
+import { ET_HINDI_LOGO_MSID } from "@constant/index";
+const { data, pathname, prefix } = Astro.props;
+let imageCaption = "";
+if (data) {
+  const caption =
+    data?.cmsassoc &&
+    data.cmsassoc.length &&
+    data.cmsassoc.some((i) => i.cmstype == "IMAGES") &&
+    Object.values(data.cmsassoc)
+      ? data.cmsassoc.filter((i) => i.cmstype == "IMAGES")
+      : [];
+
+  imageCaption = caption[0]?.title || "";
+}
+
+const seoAuthor = {};
+
+if (data?.metainfo?.ImageCreditAuthor?.value) {
+  seoAuthor.name = data?.metainfo?.ImageCreditAuthor?.value;
+}
+
+if (data?.metainfo?.ImageCreditAuthoHomeUrl?.value) {
+  seoAuthor.url = data?.metainfo?.ImageCreditAuthoHomeUrl?.value;
+}
+
+const isAmpPage =
+  pathname && (pathname.indexOf("/amp") >= 0 || pathname.indexOf("amp_") >= 0);
+
+let imgaeUrl = "";
+let imgaeAMPUrl = "";
+let publishDate = "";
+let updatedDate = "";
+
+if (data && data.msid) {
+  imgaeUrl = getNewImageUrl({
+    msid: data.msid,
+    imgWidth: 1280,
+    imgHeight: 720,
+  });
+  imgaeAMPUrl = getNewImageUrl({
+    msid: data.msid,
+    imgWidth: 1280,
+    imgHeight: 720,
+  });
+}
+
+if (data && data.insertdate) {
+  publishDate = getSEOFriendlyDate(data.insertdate);
+}
+
+if (
+  data &&
+  data.metainfo &&
+  data.metainfo.LastPublishMilliTime &&
+  data.metainfo.LastPublishMilliTime.value
+) {
+  updatedDate = getSEOFriendlyDate(data?.metainfo?.LastPublishMilliTime?.value);
+}
+const image = {
+  "@type": "ImageObject",
+  url: imgaeUrl,
+  height: 720,
+  width: 1280,
+  caption: imageCaption,
+};
+
+const imageAmp = {
+  "@type": "ImageObject",
+  url: imgaeAMPUrl,
+  height: 720,
+  width: 1280,
+};
+const logo = {
+  "@type": "ImageObject",
+  url: `${process.env.NEXT_PUBLIC_PHOTO_API}/photo/msid-${ET_HINDI_LOGO_MSID}/${ET_HINDI_LOGO_MSID}.jpg`,
+  width: 600,
+  height: 60,
+};
+
+const pub = {
+  "@type": "NewsMediaOrganization",
+  name: "ET Now Swadesh",
+  logo,
+};
+
+const authors = data.authors;
+const authorName =
+  authors && authors[0] && authors[0].name
+    ? `${authors[0].name}`
+    : "Times Now Digital";
+const authorUrl =
+  authors && authors[0] && authors[0].seoname
+    ? `${getDomain()}/author/${authors[0].seoname}-${authors[0].id}`
+    : getDomain();
+
+const author = authorName
+  ? {
+      "@type": "Person",
+      name: seoAuthor?.name ? seoAuthor?.name : authorName,
+      url: authorUrl,
+    }
+  : undefined;
+
+let headline = "";
+if (data && data.title) {
+  headline = data.title.replace(/["]/gi, "");
+}
+let des = prefix
+  ? removeHtmlTags(prefix)
+  : data && data.synopsis
+    ? removeHtmlTags(data.synopsis)
+    : "";
+const type = "NewsArticle";
+
+let articleBody =
+  data && data.text
+    ? removeHtmlTags(data.text)
+    : data?.synopsis
+      ? data?.synopsis
+      : "";
+if (data?.cmstype == "ARTICLE" || data?.cmstype == "MOVIEREVIEW") {
+  articleBody = data?.embedData
+    ?.map((s) => removeHtmlTags(s.htmlText))
+    .join(" ");
+} else if (data?.cmstype == "LIVEBLOG") {
+  des =
+    data && data.metainfo.Altdescription && data.metainfo.Altdescription.value
+      ? removeHtmlTags(data.metainfo.Altdescription.value)
+      : removeHtmlTags(data.synopsis);
+  des = data?.mobilesynopsis ? removeHtmlTags(data?.mobilesynopsis) : des;
+  articleBody = data && data.synopsis ? removeHtmlTags(data.synopsis) : des;
+} else if (
+  data?.cmstype == "PHOTOGALLERYSLIDESHOWSECTION" ||
+  data?.cmstype == "PHOTOGALLERYLISTSECTION"
+) {
+  articleBody = data?.slides
+    .map((s) => removeHtmlTags(s.title) + ", " + removeHtmlTags(s.synopsis))
+    .join(" ");
+}
+
+let url;
+const mainEntity = (url =
+  data && data?.overridelink
+    ? `${data?.overridelink}`
+    : getDomain() + pathname);
+const keywords =
+  data && data.keywords && data.keywords.length > 0 ? data.keywords : [];
+const jsonListKeywords = keywords.reduce((result, item) => {
+  return `${result}${item.name},`;
+}, "");
+const schema = {
+  "@context": "https://schema.org",
+  "@type": type,
+  mainEntityOfPage: mainEntity,
+  url: url,
+  datePublished: updatedDate,
+  dateModified: updatedDate,
+  articleSection: data.parenttitle,
+  headline: headline,
+  name: headline,
+  keywords: jsonListKeywords,
+  description: des,
+  articleBody: articleBody.replace(/<\/?[^>]+>/gi, ""),
+  image: isAmpPage ? imageAmp : image,
+  author: author,
+  publisher: pub,
+};
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+  slot="head"
+/>

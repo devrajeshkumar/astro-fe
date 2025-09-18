@@ -1,0 +1,36 @@
+---
+const { data } = Astro.props;
+const jsonListItem = [];
+
+data.forEach((list, index) => {
+  const link = list?.seopath ? list.seopath.replace("/amp", "") : "";
+  const itemDetail = {
+    "@type": "Thing",
+    name: list.label,
+  };
+  if (!list?.disabled && list?.link !== "/") {
+    itemDetail["@id"] = list?.link?.replace("/amp", "");
+  }
+  const listItem = {
+    "@type": "ListItem",
+    position: index + 1,
+    item: itemDetail,
+  };
+  if (link && link !== "/") {
+    listItem.item["@id"] = link;
+  }
+  jsonListItem.push(listItem);
+});
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: jsonListItem,
+};
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+  slot="head"
+/>

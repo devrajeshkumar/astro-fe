@@ -4,19 +4,20 @@ import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.
 import Typography from "@components/common/widgets/typography/Typography.astro";
 import { generateDataListFromPath } from "../../../utils/common";
 import Link from "../link/Link.astro";
+import BreadcrumbSchema from "../seo/schema/BreadcrumbSchema.astro";
 const { isWrap, inLineStyle, isWhiteLayout = true, category } = Astro.props;
 const dataList = generateDataListFromPath(category);
 ---
-
+<BreadcrumbSchema data={dataList}/>
 <ContainerBox isWrap={isWrap} inLineStyle={inLineStyle}>
   <ul
-    className={`${style["breadcrumb-list"]} ${isWhiteLayout ? style["white"] : style["black"]}`}
+    class={`${style["breadcrumb-list"]} ${isWhiteLayout ? style["white"] : style["black"]}`}
   >
     {
       dataList &&
         dataList.map((item, index) => {
           return (
-            <li className={style["listing"]}>
+            <li class={style["listing"]}>
               <Link link={`${item?.seopath}`}>
                 <Typography
                   tag={"span"}

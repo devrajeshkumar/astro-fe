@@ -1,0 +1,31 @@
+---
+import { getDomain } from "@utils/common";
+const { data } = Astro.props;
+const listOfRoutes = data && data?.response?.length > 0 ? data?.response : [];
+const jsonListItem = [];
+listOfRoutes.slice(0, 10).forEach((list) => {
+  if (!list?.overridelink) {
+    const listItem = [
+      {
+        "@context": "https://schema.org",
+        "@type": "SiteNavigationElement",
+        "@id": getDomain() + "#table-of-content",
+        name: list.title,
+        url: `${getDomain()}/${list?.seopath}`,
+      },
+    ];
+    jsonListItem.push(listItem);
+  }
+});
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": jsonListItem,
+};
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+  slot="head"
+/>

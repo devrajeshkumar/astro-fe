@@ -8,7 +8,7 @@ const msid = values.get("id");
 const isMobileView = values.get("isMobileView");
 
 const articleData = await fetch(
-  `https://azapishindi.etnownews.com/request/articleshow?origin=${isMobileView === "true" ? "mobile" : "desktop"}&msid=${msid}&channel_id=386`
+  `https://apihindi.etnownews.com/request/articleshow?origin=${isMobileView === "true" ? "mobile" : "desktop"}&msid=${msid}&channel_id=386`
 );
 const app = await articleData.json();
 ---
