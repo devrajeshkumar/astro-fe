@@ -28,7 +28,6 @@ import {
   CATEGORY_TYPE_VIDEO_ARTICLE,
   DEFAULT_IMAGE_MSID,
 } from "src/constant/index";
-import VideoTypeList from "./VideoTypeList.astro";
 import AdContainer from "@components/common/adcontainer/AdContainer.astro";
 import ScrollHideButtons from "@components/common/buttons/ScrollHideButtons.astro";
 import ShareIcon from "../socialShare/ShareIcon.astro";
@@ -38,6 +37,7 @@ import WebPageSchema from "@components/common/seo/schema/WebPageSchema.astro";
 import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.astro";
 import style from "./Article.module.scss";
 import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
+import VideoSlideList from "@components/common/videoSlideList/VideoSlideList.astro";
 
 const { category, msid, app } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
@@ -112,7 +112,7 @@ const ads = app?.response?.ads;
           embedData?.paraLength > 3 ? style["collapsed"] : ""
         } ${embedData?.paraLength === 3 && embedData.ispara ? style["clipped-para"] : ""}`}
       >
-        <VideoTypeList
+        <VideoSlideList
           videoType={embedData.videoType}
           mainData={mainData}
           aList={[mainData]}

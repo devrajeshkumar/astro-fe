@@ -1,0 +1,80 @@
+---
+import style from "./VideoSlideList.module.scss";
+import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
+import CustomSlideBox from "@components/common/wrappers/customSlideBox/CustomSlideBox.astro";
+import MultiVideoPlayer from "@components/reactComponents/multiVideoPlayer/MultiVideoPlayer.jsx";
+import { CATEGORY_TYPE_VIDEO_ARTICLE } from "src/constant/index";
+
+const { videoType, mainData, aList, MULTI_VIDEO_LIST_COUNT, pathname } =
+  Astro.props;
+const getSlikeId = (msid, mainData) => {
+  try {
+    let cmsEmbed = mainData?.cmsembed;
+    const slikeKey = cmsEmbed.filter((data) => data.msid == Number(msid));
+    if (slikeKey.length > 0) {
+      return slikeKey[0]?.media?.id ? slikeKey[0]?.media?.id : "";
+    } else {
+      return "";
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+---
+
+<ContainerBox>
+  <CustomSlideBox
+    elementType={"ulBox"}
+    gridGap={15}
+    changeStyle={`${videoType?.list?.length > 1 ? "width-100-120" : "singleItem"}`}
+    marginBottom={0}
+  >
+    {
+      videoType?.list?.map((item, index) => (
+        <li key={item.msid} class={style["video-col"]}>
+          {getSlikeId(item.msid, mainData) && (
+            <div class={style["lineclamp_show"]}>
+              {aList.length == MULTI_VIDEO_LIST_COUNT ? (
+                <MultiVideoPlayer
+                  data={{
+                    media: {
+                      id: getSlikeId(item.msid, mainData),
+                      msid: Number(item.msid),
+                    },
+                  }}
+                  key={Number(item.msid)}
+                  index={11}
+                  idx={11}
+                  articleLength={1}
+                  videoCount={1}
+                  channelTitle={item.msid}
+                  categoryType={CATEGORY_TYPE_VIDEO_ARTICLE}
+                  videoId={{
+                    id: Number(item.hostid),
+                    startTime: "",
+                  }}
+                  msid={Number(item.msid)}
+                  mainData={{
+                    ...item,
+                    msid: Number(item.msid),
+                  }}
+                  data-attr-cat={CATEGORY_TYPE_VIDEO_ARTICLE}
+                  client:load
+                />
+              ) : (
+                <div
+                  key={index}
+                  data-attr-slk={getSlikeId(item.msid, mainData) || ""}
+                  data-attr-msid={item?.msid}
+                  title={item.msid}
+                  data-attr-cat={CATEGORY_TYPE_VIDEO_ARTICLE}
+                />
+              )}
+            </div>
+          )}
+        </li>
+      ))
+    }
+  </CustomSlideBox>
+</ContainerBox>
