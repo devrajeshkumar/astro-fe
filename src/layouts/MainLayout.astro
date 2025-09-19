@@ -92,11 +92,10 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
 
   <script id="ga4Script" set:html={ga4Script} defer async is:inline />
 
+  <script src="/scripts/adManager.js" defer is:inline></script>
+  <script src="/scripts/adSystem.js" defer is:inline></script>
 
-  <script id="dpfscript" src="/dfpamzn.js" type="text/javascript" async defer
-  ></script>
-
-  <script id="apstagScript" set:html=`!(function (a9, a, p, s, t, A, g) {
+  <script id="apstagScript" set:html={`!(function (a9, a, p, s, t, A, g) {
     if (a[a9]) return;
     function q(c, r) {
       a[a9]._Q.push([c, r]);
@@ -126,7 +125,7 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
     document,
     "script",
     "//c.amazon-adsystem.com/aax2/apstag.js",
-  );` type="text/javascript" async defer></script>
+  )`} type="text/javascript" async defer is:inline></script>
 
   </script>
   <script

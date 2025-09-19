@@ -1,4 +1,5 @@
 ---
+// AdCaller.astro - Updated to use AdManager
 import Advertisement from "../advertisement/Advertisement.astro";
 export interface Props {
   id?: string;
@@ -74,26 +75,6 @@ const {
 } = Astro.props;
 
 // Helper functions
-function getDFPType(adCode = "") {
-  let dfpType;
-  const adCodeInCaps = adCode.toUpperCase();
-  if (adCodeInCaps) {
-    if (adCodeInCaps.indexOf("_ATF") > -1) {
-      dfpType = "atf";
-    } else if (adCodeInCaps.indexOf("_BTF") > -1) {
-      dfpType = "btf";
-    } else if (adCodeInCaps.indexOf("_MREC") > -1) {
-      dfpType = "mrec";
-    } else if (adCodeInCaps.indexOf("_MTF") > -1) {
-      dfpType = "mtf";
-    } else if (adCodeInCaps.indexOf("_FBN") > -1) {
-      dfpType = "fbn";
-    } else if (adCodeInCaps.indexOf("GLANCE") > -1) {
-      dfpType = "mrec";
-    }
-  }
-  return dfpType;
-}
 
 function getMaxHeightFromAdSize(size) {
   if (!size || !Array.isArray(size)) return 0;
@@ -144,39 +125,6 @@ const adClasses = [
   .filter(Boolean)
   .join(" ");
 
-// Build data attributes
-const dfpType = getDFPType(adCode);
-const dataAttributes: Record<string, any> = {
-  "data-type": dfpType,
-  "data-adunit": adCode,
-  "data-dimensions": JSON.stringify(size),
-};
-
-if (pageTarget?.section?.category) {
-  dataAttributes["data-section"] = pageTarget.section.category;
-}
-if (pageTarget?.section?.sub_category) {
-  dataAttributes["data-subsec"] = pageTarget.section.sub_category;
-}
-if (pageTarget?.page) {
-  dataAttributes["data-pagetype"] = pageTarget.page;
-}
-if (pageTarget?.query && Object.values(pageTarget.query).length > 0) {
-  dataAttributes["data-QueryId"] = Object.values(pageTarget.query)[0];
-}
-if (pageTarget?.metaInfoAttr) {
-  dataAttributes["data-metaInfoAttr"] = pageTarget.metaInfoAttr;
-}
-if (pageTarget?.msid) {
-  dataAttributes["data-msid"] = pageTarget.msid;
-}
-if (pageTarget?.article_index) {
-  dataAttributes["data-idx"] = pageTarget.article_index;
-}
-if (refreshRate) {
-  dataAttributes["data-refreshRate"] = refreshRate;
-}
-
 // Container classes
 const containerClasses = [
   isInterstitial
@@ -202,14 +150,15 @@ const containerStyle = {
   ...inlineStyle,
 };
 
-// Generate unique ID for lazy loading
-const lazyLoadId = `ad-lazy-${divId}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
-
-// CRITICAL: Determine if this ad should be lazy loaded
-// Default to lazy loading UNLESS explicitly told not to
+// Determine loading strategy
 const shouldLazyLoad = !atf && !isSkiplazyload && !isGlance;
+const shouldDelay = isDelay;
 
-// Debug info (will be removed in production)
+// Build query params
+const queryParams = {
+  utm_source: pageTarget?.customParams?.utm_source,
+  utm_medium: pageTarget?.customParams?.utm_medium,
+};
 ---
 
 {
@@ -218,60 +167,80 @@ const shouldLazyLoad = !atf && !isSkiplazyload && !isGlance;
       id={parentDivId || `container-${divId}`}
       style={containerStyle}
       class={`ad-container ${containerClasses}`}
-      data-lazy-load-id={lazyLoadId}
+      data-ad-type="adcaller"
       data-should-lazy-load={shouldLazyLoad.toString()}
-      data-ad-config={JSON.stringify({
-        adCode,
-        divId,
-        size,
-        pageTarget,
-        pathname,
-        isGlance,
-        isSkiplazyload,
-        isDelay,
-        shouldLazyLoad,
-        atf,
-      })}
+      data-should-delay={shouldDelay.toString()}
+      data-atf={atf?.toString()}
     >
       {shouldLazyLoad ? (
-        <div
-          id={`${divId}-placeholder`}
-          class={`ad-placeholder ${adClasses}`}
-          style={{
-            minHeight: maxHeight ? `${maxHeight}px` : "250px",
-          }}
-          {...dataAttributes}
-          data-original-div-id={divId}
-        />
-      ) : !isSkiplazyload && !isGlance ? (
+        // <div
+        //   class={`ad-placeholder ${adClasses}`}
+        //   style={{
+        //     minHeight: maxHeight ? `${maxHeight}px` : "250px",
+        //   }}
+        //   data-placeholder-for={divId}
+        // />
         <Advertisement
           adCode={adCode}
           size={size}
           divId={divId}
           pageTarget={pageTarget}
-        >
-          <div
-            id={divId}
-            class={`dfp ${adClasses}`}
-            style={!spacing ? { padding: "0px" } : { padding: "8px" }}
-            {...dataAttributes}
-          />
-        </Advertisement>
+          queryParams={queryParams}
+          className={adClasses}
+          lazyLoad={true}
+          spacing={spacing}
+        />
+      ) : shouldDelay ? (
+        <Advertisement
+          adCode={adCode}
+          size={size}
+          divId={divId}
+          pageTarget={pageTarget}
+          queryParams={queryParams}
+          className={`dfp-delay ${adClasses}`}
+          spacing={spacing}
+        />
       ) : (
-        <div
-          id={divId}
-          class={`${isSkiplazyload && !isDelay ? "dfp" : ""} ${isDelay ? "dfp-delay" : ""} ${adClasses}`}
-          style={!spacing ? { padding: "0px" } : { padding: "8px" }}
-          {...dataAttributes}
+        <Advertisement
+          adCode={adCode}
+          size={size}
+          divId={divId}
+          pageTarget={pageTarget}
+          queryParams={queryParams}
+          className={adClasses}
+          spacing={spacing}
         />
       )}
     </div>
   )
 }
 
-<style>
-  .ad-container {
-    margin: 0;
-    position: relative;
+<script>
+  // Enhanced AdCaller initialization
+  document.addEventListener("DOMContentLoaded", () => {
+    initializeAdCaller();
+  });
+
+  // Handle Astro navigation
+  document.addEventListener("astro:after-swap", () => {
+    setTimeout(initializeAdCaller, 100);
+  });
+
+  function initializeAdCaller() {
+    const adManager = window.AdManager?.getInstance();
+    if (!adManager) {
+      console.error("[AdCaller] AdManager not available");
+      return;
+    }
+
+    // Process delayed ads after page load
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        adManager.discoverAndRenderAds('.dfp-delay');
+      }, 7000);
+    });
+
+    // Mark AdCaller as initialized
+    document.body.dataset.adCallerInitialized = "true";
   }
-</style>
+</script>
