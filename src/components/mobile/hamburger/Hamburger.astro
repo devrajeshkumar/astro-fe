@@ -6,6 +6,7 @@ import style from "./Hamburger.module.scss";
 import Search from "@components/common/search/Search.astro";
 import { getDomain, getUrl, NAVIGATION_GROUPS } from "@utils/common";
 import Accordian from "@components/common/accordian/Accordian.astro";
+import { hindiTranslation } from "@constant/index";
 const {
   hamburgerOpenId = "",
   hamburgerCloseId = "",
@@ -45,7 +46,7 @@ const groupedDataNavigation = groupMenuData(data);
       <button id={hamburgerCloseId}>
         <SvgIcon IconName={"CloseIconBig"} width={26} height={16} />
       </button>
-      <Link link={""} className={style["live-tv"]}>
+      <Link link={`${getDomain()}/live-tv`} className={style["live-tv"]}>
         <SvgIcon
           IconName={"livetvNewIcon"}
           width={26}
@@ -54,7 +55,7 @@ const groupedDataNavigation = groupMenuData(data);
         />
         <Typography
           tag={"span"}
-          text={"Live TV"}
+          text={hindiTranslation.LIVE_TV}
           changeStyle={"font-size-12"}
           fontWeight={"400"}
           isLineClamp={false}
@@ -83,7 +84,7 @@ const groupedDataNavigation = groupMenuData(data);
       <ul class={style.mainMenu}>
         <li class={style.categoryHome}>
           <Link
-            link={"/"}
+            link={getDomain()}
             className={`${style.categoryHeader} ${style["active"]}`}
           >
             <SvgIcon IconName={"HomeIcon"} width="21" height="20" />
