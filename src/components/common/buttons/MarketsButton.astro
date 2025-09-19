@@ -4,6 +4,7 @@ import SvgIcon from "@components/common/svg/SvgIcon.astro";
 import Typography from "../widgets/typography/Typography.astro";
 import Link from "../link/Link.astro";
 import { getDomain } from "@utils/common";
+import LazyImage from "../lazyImage/LazyImage.astro";
 const { changeStyle = "", inLineStyle = {}, id } = Astro.props;
 ---
 
@@ -13,18 +14,9 @@ const { changeStyle = "", inLineStyle = {}, id } = Astro.props;
   link={`${getDomain()}/market-overview`}
   id={id}
 >
-  <SvgIcon IconName="Markets" width={17} height={13} />
-  <Typography
-    tag="span"
-    text={"Market"}
-    changeStyle="font-size-12"
-    isConditionalRendering={true}
-    isLineClamp={false}
-    isWhiteLayout={true}
-    inLineStyle={{
-      lineHeight: "1.2",
-      fontWeight: "700",
-      whiteSpace: "nowrap",
-    }}
+  <LazyImage
+    datasrc="/assets/images/google-cta.gif"
+    alt="Google CTA"
+    inLineStyle={{}}
   />
 </Link>
