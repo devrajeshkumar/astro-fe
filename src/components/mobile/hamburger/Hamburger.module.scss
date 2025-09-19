@@ -71,6 +71,8 @@
   position: sticky;
   top: 0;
   z-index: 1;
+  margin-bottom: 15px;
+  
   .categoryHeader {
     padding: 10px 15px;
   }
@@ -118,7 +120,7 @@
   flex-direction: column;
 
   .categoryHeader {
-    padding-left: 42px;
+    padding-left: 60px;
   }
 
   .subMenu {
