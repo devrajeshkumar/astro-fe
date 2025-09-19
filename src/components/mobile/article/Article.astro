@@ -76,7 +76,7 @@ const ads = app?.response?.ads;
 <AdContainer
   inLineStyle={{ width: "300px", minHeight: "250px", marginBottom: "16px" }}
 >
-  <AdCaller {...app?.response?.ads?.atf} atf={true} pageTarget={pageTarget} />
+  <AdCaller class=".dfp" {...app?.response?.ads?.atf} atf={true} pageTarget={pageTarget} />
 </AdContainer>
 {
   mainData?.summary ? (

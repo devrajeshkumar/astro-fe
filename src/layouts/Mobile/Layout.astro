@@ -5,7 +5,6 @@ import Article from "@components/mobile/article/Article.astro";
 import TrendingStock from "@components/mobile/trendingStock/TrendingStock.astro";
 import Footer from "@components/mobile/footer/Footer.astro";
 import BottomSticky from "@components/mobile/bottomSticky/BottomSticky.astro";
-
 const { pageTarget, app } = Astro.props;
 const ads = _get(app, "response.ads", {});
 ---
@@ -16,5 +15,5 @@ const ads = _get(app, "response.ads", {});
   <Article app={app} category={pageTarget.category} msid={pageTarget.msid} pageTarget={pageTarget} />
   <slot />
   <Footer />
-  <BottomSticky stickyAds={ads?.stky} />
+  <BottomSticky stickyAds={ads?.stky} pageTarget ={pageTarget} />
 </Fragment>

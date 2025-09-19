@@ -313,8 +313,16 @@ class AdManager {
      * Apply targeting to ads
      */
     applyTargeting(pageTarget, queryParams) {
+        function getCohortData() {
+          if (typeof document !== 'undefined') {
+            const cohortData = localStorage.getItem('cdp_audience');
+            if (cohortData) {
+              return cohortData.split(',');
+            }
+          }
+          return [];
+        };
       window.googletag.pubads().clearTargeting();
-  
       const targetingMap = {
         section: pageTarget?.section?.category,
         subsec: pageTarget?.section?.sub_category || pageTarget?.sub_category,
@@ -334,12 +342,25 @@ class AdManager {
         }
       });
   
+      let customParams;
+      if (typeof window !== 'undefined' && window.cdpCustomParams) {
+        customParams = window.cdpCustomParams;
+      }
+      if (customParams && typeof customParams === 'object') {
+        Object.keys(customParams).forEach((key) => {
+          window.googletag.pubads().setTargeting(key, [customParams[key]]);
+        });
+      }
       // Set publisher provided ID
       if (typeof window.getCookieValue !== "undefined") {
         const tg_ppid = window.getCookieValue("tg_ppid");
         if (tg_ppid) {
           window.googletag.pubads().setPublisherProvidedId(tg_ppid);
         }
+      }
+     let cohortList = getCohortData();
+      if(cohortList) {
+        window.googletag.pubads().setTargeting("cdp_audience", cohortList);
       }
     }
   
