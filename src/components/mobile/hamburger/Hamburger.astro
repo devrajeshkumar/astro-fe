@@ -119,7 +119,6 @@ const groupedDataNavigation = groupMenuData(data);
               </div>
               <ul class={style.subMenu}>
                 {category.items.map((item) => (
-                  <Accordian showChildren={item?.children?.length > 0} title={item?.title} instanceId={item?.title} closePrev={true}>
                     <Link
                       slot="header"
                       link={`${getDomain()}/${item?.seopath}`}
@@ -168,7 +167,6 @@ const groupedDataNavigation = groupMenuData(data);
                         </li>
                       ))}
                     </ul>
-                  </Accordian>
                 ))}
               </ul>
             </li>
