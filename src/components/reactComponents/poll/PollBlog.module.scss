@@ -35,7 +35,7 @@
   float: left;
   font-size: 1rem;
   padding: 20px;
-  background: var(--bgPink);
+  background: #f8e9e9;
   ._z_poll_label {
     float: left;
     line-height: 1;
@@ -58,7 +58,6 @@
     color: var(--textColor);
     font-weight:400;
     margin-bottom: 10px;
-    font-family: var(--fontFamilyDMDisplay);
     font-size: 1.25rem;
     font-style: italic;
   }
@@ -102,8 +101,8 @@
       opacity: 0;
       cursor: pointer;
       &:checked ~ ._z_checkmark {
-        background-color: var(--colormain);
-        border: 1px solid var(--colormain);
+        background-color: #e70437;
+        border: 1px solid #e70437;
       }
       &:checked ~ ._z_checkmark:after {
         display: block;
@@ -126,7 +125,7 @@
     width: 100%;
     float: left;
     &_button {
-      color: var(--white-color);
+      color: var(--whiteColor);
       font-weight: 500;
       font-size: 0.875rem;
       border: 0;
@@ -146,13 +145,13 @@
   display: flex;
 }
 .active {
-  background: var(--colormain);
+  background: #e70437;
 }
 .progress {
   ._z_radio_poll {
     margin-bottom: 20px;
     max-height: 100px;
-    background: var(--pollOptionBG);
+    background: #ebebeb;
     padding: 10px 12px 10px 38px;
     border-radius: 30px;
     overflow: hidden;
@@ -182,8 +181,8 @@
       opacity: 0;
       cursor: pointer;
       &:checked ~ ._z_checkmark {
-        background-color: var(--colormain);
-        border: 1px solid var(--colormain);
+        background-color: #e70437;
+        border: 1px solid #e70437;
       }
       &:checked ~ ._z_checkmark:after {
         display: block;
@@ -197,7 +196,7 @@
       top: 2px;
       width: 5px;
       height: 8px;
-      border: solid var(--textColorWhite);
+      border: solid var(--whiteColor);
       border-width: 0 2px 2px 0;
       -webkit-transform: rotate(45deg);
       -ms-transform: rotate(45deg);
@@ -206,19 +205,19 @@
   }
 }
 .bg_disable {
-  background-color: var(--borderinputbox);
+  background-color: var(--borderColor);
 }
 
 .high {
-  background: var(--poll-color);
+  background: #ffc8c5;
 }
 
 .low {
-  background: var(--poll-color);
+  background: #ffc8c5;
   opacity: 0.5;
 }
 .pollBg-grey {
-  background-color: var(--bgPink);
+  background-color: var(#F8E9E9);
   padding: 20px;
   min-height: 242px;
   margin-bottom: 15px;
