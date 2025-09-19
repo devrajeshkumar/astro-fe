@@ -3,7 +3,6 @@ import style from "./Header.module.scss";
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import TopNavigation from "../topNavigation/TopNavigation.astro";
 import Navigation from "../navigation/Navigation.astro";
-import EmblaSlider from "@components/common/slider/EmblaSlider.astro";
 
 const navData = await fetch("https://apihindi.etnownews.com/api/getnavigation?msid=ALL&channel_id=386");
 const navDataJson = await navData.json();

@@ -37,6 +37,7 @@ import SubscribeWithEmail from "@components/common/subscribeWithEmail/SubscribeW
 import WebPageSchema from "@components/common/seo/schema/WebPageSchema.astro";
 import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.astro";
 import style from "./Article.module.scss";
+import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
 
 const { category, msid, app } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
@@ -118,28 +119,52 @@ const ads = app?.response?.ads;
           MULTI_VIDEO_LIST_COUNT={1}
         />
         <ContainerBox>
-          <SocialWidgets
-            data={{ text: embedData?.twitterList, type: "twitter" }}
-          />
-          <SocialWidgets
-            data={{ text: embedData?.instagramList, type: "instagram" }}
-          />
-          <SocialWidgets data={{ text: embedData?.fbList, type: "fb" }} />
-          <SocialWidgets
-            data={{ text: embedData?.reditList, type: "reddIt" }}
-          />
-          <SocialWidgets
-            data={{ text: embedData?.iframeText, type: "iframe" }}
-          />
+       {embedData?.twitterList &&
+        <LazyLoad strategy="viewport" placeholderHeight="150px">
+              <SocialWidgets
+                data={{ text: embedData?.twitterList, type: "twitter" }}
+             />
+          </LazyLoad>
+        }
+        {embedData?.instagramList &&
+        <LazyLoad strategy="viewport" placeholderHeight="150px">
+              <SocialWidgets
+                data={{ text: embedData?.instagramList, type: "instagram" }}
+             />
+          </LazyLoad>
+        }
+        {embedData?.fbList &&
+        <LazyLoad strategy="viewport" placeholderHeight="150px">
+              <SocialWidgets data={{ text: embedData?.fbList, type: "fb" }} />
+          </LazyLoad>
+        }
+        {embedData?.reditList &&
+        <LazyLoad strategy="viewport" placeholderHeight="150px">
+              <SocialWidgets
+                data={{ text: embedData?.reditList, type: "reddIt" }}
+             />
+          </LazyLoad>
+        }
+        {embedData?.iframeText &&
+        <LazyLoad strategy="viewport" placeholderHeight="150px">
+              <SocialWidgets
+                data={{ text: embedData?.iframeText, type: "iframe" }}
+             />
+          </LazyLoad>
+        }
         </ContainerBox>
         <TextLinkComponent
           htmlText={embedData.htmlText}
           iconType={embedData.iconType}
         />
-        <YoutubeEmbed
-          html_tag_attributes={embedData?.youtubeList}
-          type={"WITH_THUMB"}
-        />
+        {embedData?.youtubeList &&
+        <LazyLoad strategy="viewport" placeholderHeight="150px">
+              <YoutubeEmbed
+                html_tag_attributes={embedData?.youtubeList}
+                type={"WITH_THUMB"}
+             />
+          </LazyLoad>
+        }
         {embedData?.id ? (
           <MultiVideoPlayer
             data={{
