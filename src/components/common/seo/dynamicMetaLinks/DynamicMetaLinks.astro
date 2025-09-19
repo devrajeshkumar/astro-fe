@@ -10,7 +10,7 @@ import OrgSchema from "../schema/OrgSchema.astro"
 import OrgSchemaMicrosite from "../schema/OrgSchemaMicrosite"
 import WebSite from "../schema/Website";
 
-const { data = {}, status, isAmp = false } = Astro.props;
+const { seoObject = {}, status, isAmp = false } = Astro.props;
 
 function generateTags(seoObject) {
   if (seoObject?.metaTags instanceof Array) {
@@ -43,7 +43,6 @@ function generateCDPMeta(seoData) {
   }).filter(Boolean);
 }
 
-const seoObject = data || {};
 const seoObjectStatic =
   status === 404
     ? NOT_FOUND_META_DETAIL
@@ -135,7 +134,7 @@ canonical === '/market-in-minutes/' ? (
   />
 )}
 
-{!is404 && !isAmp && (seoObject.amplink || seoObject.amphtml) && (
+{(seoObject.amplink || seoObject.amphtml) && (
   <link rel="amphtml" href={seoObject.amphtml} />
 )}
 {metaTags.map(({ tagName, attributes }) => {

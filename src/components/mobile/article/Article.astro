@@ -39,7 +39,7 @@ import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.a
 import style from "./Article.module.scss";
 import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
 
-const { category, msid, app } = Astro.props;
+const { category, msid, app , pageTarget } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
 const ads = app?.response?.ads;
 ---
@@ -89,7 +89,7 @@ const ads = app?.response?.ads;
 <AdContainer
   inLineStyle={{ width: "300px", minHeight: "250px", marginBottom: "16px" }}
 >
-  <AdCaller {...app?.response?.ads?.atf} atf={true} />
+  <AdCaller {...app?.response?.ads?.atf} atf={true} pageTarget={pageTarget} />
 </AdContainer>
 {
   mainData?.summary ? (
@@ -207,7 +207,7 @@ const ads = app?.response?.ads;
               margin: "16px auto",
             }}
           >
-            <AdCaller {...embedData?.ad} />
+            <AdCaller {...embedData?.ad} pageTarget={pageTarget} />
           </AdContainer>
         ) : null}
         {embedData.isMGIDShow ? (

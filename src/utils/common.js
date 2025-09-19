@@ -85,9 +85,9 @@ export const getCustomDimensionsSSR = (app, navigation, seoData) => {
       }
     }
     const category = navigation?.category || "";
-    const sub_category = navigation?.subCategory || "";
-    const sub_sub_category = navigation?.subSubCategory || "";
-    const sub_sub_sub_category = navigation?.subSubSubCategory || "";
+    const sub_category = navigation?.sub_category || "";
+    const sub_sub_category = navigation?.sub_sub_category || "";
+    const sub_sub_sub_category = navigation?.sub_sub_sub_category || "";
     custom_dimension = {
       dimension1: seoData.msid,
       dimension2: published_date,
@@ -385,19 +385,19 @@ export function SlikeLoaderScript() {
 
 export const seoDefaultMeta = {
   title:
-    "Business News, Finance News, Latest Business News Today Updates | ET Now",
+    'Business News in Hindi, Latest Share Market News, BSE, NSE, Indian Stock Market News in Hindi | ET Now Swadesh',
   description:
-    "ET Now: Read here all the latest news of Business, Finance, Markets from India and around the world on ET Now.",
+    ' ET Now Swadesh: Get Latest Business News in Hindi (बिज़नेस न्यूज़), Share Market news in hindi, BSE, NSE, Stock markets trends, companies, industry, economy and Share Tips in Hindi on ET Now Swadesh',
   keywords:
-    "ET Now, Business News, Latest Business News, Finance News, Markets News, Market News, Business News Today, Finance News Today, India Business News, World Business News",
+    'Business News in Hindi, Market News in Hindi, Stock News in Hindi, Share Market News in Hindi, Indian Stock Market News, Latest Stock Market News, Economic News, BSE, NSE, Share Tips in Hindi, ET Now Swadesh',
 };
 
 export const NOT_FOUND_META_DETAIL = {
-  title: "404 Page Not Found | ET Now",
-  description: "404 Page Not Found on ET Now",
-  keywords: "404 page, 404 page not found, ET Now",
-  robots: "noindex, nofollow",
-  canonical: "https://www.etnownews.com/404",
+  title: '404 Page Not Found | ET Now Swadesh',
+  description: '404 Page Not Found on ET Now Swadesh',
+  keywords: '404 page, 404 page not found, ET Now Swadesh',
+  robots: 'noindex,nofollow',
+  canonical: 'https://hindi.etnownews.com/404'
 };
 
 export const IMG_OG_DEFAULT = `${
@@ -610,4 +610,170 @@ export const getSEOFriendlyDate = (tmstmp) => {
   }
 
   return `${dayjs.tz(Number(tmstmp), "Asia/Calcutta").format()}`;
+};
+
+export const setPageTargetData = (
+  pageType,
+  query,
+  finalParams,
+  data,
+  seoData,
+  msid,
+  searchedKey,
+) => {
+  
+  let article_sequence = -1;
+  let metaInfoAttr = searchedKey ? searchedKey : '';
+  let createdBy = '';
+  if (data && data.length > 0) {
+    article_sequence = data.findIndex((item) => item.msid == msid);
+
+    let newData =
+      article_sequence > -1 ? data[article_sequence] : data ? data : '';
+
+    createdBy = newData && newData?.createdby ? newData?.createdby : '';
+
+    metaInfoAttr = `${seoData && seoData?.keywords
+      ? seoData?.keywords.replace(/, /g, ',').replace(/ +/g, '_')
+      : ''
+      }`;
+  }
+  let pageTar =
+    pageType == 'home' ||
+      pageType == 'search' ||
+      pageType == 'category' ||
+      pageType == 'listing' ||
+      pageType == 'topic_listing' ||
+      pageType == 'video_listing' ||
+      pageType == 'blog' ||
+      pageType == 'article' ||
+      pageType == 'video' ||
+      pageType == 'Author' ||
+      pageType == 'review' ||
+      pageType == 'livetv' ||
+      pageType == 'staticpage' ||
+      pageType == 'detail' ||
+      pageType == 'short-videos'
+      ? pageType
+      : '';
+
+  let queryDemo = Object.keys(query)[0] == 'demo' ? query : '';
+
+  let categoryString = '';
+  if (
+    finalParams &&
+    finalParams.category != '' &&
+    finalParams.category != undefined
+  ) {
+    categoryString = `${finalParams.category}`;
+    categoryString =
+      finalParams.sub_category != '' && finalParams.sub_category != undefined
+        ? `${categoryString}, ${finalParams.sub_category}`
+        : categoryString;
+    categoryString =
+      finalParams.sub_sub_category != '' &&
+        finalParams.sub_sub_category != undefined
+        ? `${categoryString}, ${finalParams.sub_sub_category}`
+        : categoryString;
+  }
+
+  let targetData = {
+    page: pageTar,
+    query: queryDemo,
+    section: getSectionByCategorynSub(pageType, finalParams),
+    metaInfoAttr: metaInfoAttr,
+    msid: msid != undefined ? `${msid}` : '',
+    article_index:
+      pageType == 'article'
+        ? `${article_sequence > -1 ? article_sequence : ''}`
+        : '',
+    createdBy: createdBy,
+    categoryString: categoryString,
+    tg_ppid: getCookie('tg_ppid') || '',
+    cdp_audience: getCohortDataDesktop(),
+    customParams: getCustomParamsDataDesktop(),
+  };
+  return targetData;
+};
+
+export function getCookie(name) {
+  let result = name ? undefined : {};
+  if (typeof document !== 'undefined') {
+    const cookies = document.cookie ? document.cookie.split('; ') : [];
+    for (let i = 0, l = cookies.length; i < l; i += 1) {
+      const parts = cookies[i].split('=');
+      const nameK = decodeURIComponent(parts.shift());
+      let cookie = parts.join('=');
+      cookie = _parseCookieValue(cookie);
+      if (name && name === nameK) {
+        result = cookie;
+        break;
+      }
+      if (!name && cookie !== undefined) {
+        result[nameK] = cookie;
+      }
+    }
+  }
+  return result;
+}
+
+
+export function getCohortDataDesktop() {
+  if (typeof document !== 'undefined') {
+    const cohortData = localStorage.getItem('cdp_audience');
+    if (cohortData) {
+      return cohortData.split(',');
+    }
+  }
+  return [];
+}
+
+export function getCustomParamsDataDesktop() {
+  if (typeof document !== 'undefined') {
+    const customParams = localStorage.getItem('customParams');
+    if (customParams) {
+      try {
+        // Parse JSON to return it as an object
+        return JSON.parse(customParams);
+      } catch (error) {
+        console.error('Error parsing customParams from localStorage:', error);
+        return {};
+      }
+    }
+  }
+  return {};
+} 
+
+const getSectionByCategorynSub = (pageType, finalParams) => {
+  let finalVal = {
+    category: pageType == 'topic_listing' ? 'topic' : pageType || '',
+  };
+  if (
+    finalParams['category'] != null ||
+    typeof finalParams['category'] != 'undefined'
+  ) {
+    finalVal = { category: finalParams['category'].replace(/-/g, '_') };
+    if (
+      finalParams['sub_category'] != undefined &&
+      finalParams['sub_category'] != ''
+    ) {
+      finalVal = {
+        category: finalParams['category'].replace(/-/g, '_'),
+        sub_category: finalParams['sub_category'].replace(/-/g, '_'),
+      };
+      if (
+        finalParams['sub_sub_category'] != undefined &&
+        finalParams['sub_sub_category'] != ''
+      ) {
+        finalVal = {
+          category: finalParams['category'].replace(/-/g, '_'),
+          sub_category:
+            finalParams['sub_category'].replace(/-/g, '_') +
+            '_' +
+            finalParams['sub_sub_category'].replace(/-/g, '_'),
+        };
+      }
+    }
+  }
+  return finalVal || '';
 };

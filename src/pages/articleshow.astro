@@ -2,6 +2,9 @@
 import Popup from "@components/common/popup/Popup.astro";
 import MainLayout from "../layouts/MainLayout.astro";
 import Search from "@components/common/search/Search.astro";
+import { setPageTargetData } from "../utils/common";
+import _get from "lodash/get";
+import { getDomain } from "../utils/common";
 
 const values = Astro.url.searchParams;
 const msid = values.get("id");
@@ -11,9 +14,71 @@ const articleData = await fetch(
   `https://azapishindi.etnownews.com/request/articleshow?origin=${isMobileView === "true" ? "mobile" : "desktop"}&msid=${msid}&channel_id=386`
 );
 const app = await articleData.json();
+let seoObj = {};
+const articleShowObj = _get(
+    app,
+    `response.sections.article_show.data[0].seo`,
+    {},
+  );
+let OriginalData = _get(
+    app,
+    `response.sections.article_show.data[0]`,
+    {},
+  );
+seoObj = articleShowObj;
+seoObj.canonical =
+  articleShowObj?.canonical
+    ? articleShowObj?.canonical
+    : OriginalData?.seo?.canonical || articleShowObj?.seopath
+      ? `${getDomain()}/${articleShowObj?.seopath}`
+      : '';
+
+seoObj.amphtml = articleShowObj.amphtml
+      ? articleShowObj?.amphtml 
+      : `${getDomain()}/${OriginalData?.seopath}-article-${OriginalData?.msid}/amp`;
+
+  const custumParamCdtr =  _get(app, 'response.sections.article_show.data[0].metainfo', {});
+  const CampaignKeywords =  _get(app, 'response.sections.article_show.data[0].seo.campaignkeywords', {});
+  custumParamCdtr.CampaignKeywords = CampaignKeywords;
+
+  const categoryMap = {
+    category : values.get('category') || '',
+    sub_category : values.get('sub_category') || '',
+    sub_sub_category : values.get('sub_sub_category') || '',
+    sub_sub_sub_category : values.get('sub_sub_sub_category') || '',
+  }
+  const finalParams = {
+    ...categoryMap,
+    platform: isMobileView === "true" ? "mobile" : "desktop",
+    pathname: Astro.url.pathname,
+    isMobile: isMobileView === "true" ? true : false,
+    pageName: 'article',
+    tbname: 'article',
+    type: 'article',
+    origin: 'mobile',
+    utm_source: values.get('utm_source') || '',
+    utm_meduim: values.get('utm_medium') || '',
+    countryCode: values.get('countryCode') || '',
+  };
+
+  const articleObj = _get(
+    app,
+    `response.sections.article_show.data`,
+    {},
+  );
+
+  let pagetargetObj = setPageTargetData(
+    'article',
+    categoryMap,
+    finalParams,
+    articleObj,
+    seoObj,
+    values?.get('id'), 
+  );
+
 ---
 
-<MainLayout app={app} />
+<MainLayout app={app} pageTarget = {pagetargetObj} seo={seoObj}/>
 <Popup
   instanceId="mobileSearchPopup"
   changeStyle={"top-to-bottom-slide"}
