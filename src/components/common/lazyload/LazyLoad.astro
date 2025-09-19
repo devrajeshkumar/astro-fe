@@ -1,0 +1,88 @@
+---
+interface Props {
+  /** * The strategy to use for loading the component.
+   * 'viewport': Loads when the component enters the viewport.
+   * 'scroll': Loads as soon as the user scrolls the page.
+   * @default 'viewport'
+   */
+  strategy?: 'viewport' | 'scroll';
+  /**
+   * The root margin for the Intersection Observer (only for 'viewport' strategy).
+   * It allows you to load the component before it's fully visible.
+   * e.g., '200px' loads it when it's 200px away from the viewport.
+   * @default '0px'
+   */
+  rootMargin?: string;
+  /**
+   * A placeholder height to prevent layout shift while the component is not loaded.
+   * e.g., '300px'
+   * @default '100px'
+   */
+  placeholderHeight?: string;
+}
+
+const { 
+  strategy = 'viewport', 
+  rootMargin = '0px',
+  placeholderHeight = '100px'
+} = Astro.props;
+---
+
+<div 
+  class="lazy-load-wrapper" 
+  data-strategy={strategy} 
+  data-root-margin={rootMargin}
+  style={`min-height: ${placeholderHeight};`}
+>
+  <template>
+    <slot />
+  </template>
+</div>
+
+<script>
+  // This function takes the content from the <template> and injects it into the DOM.
+  function loadComponent(wrapper: HTMLElement) {
+    const template = wrapper.querySelector('template');
+    if (template) {
+      // Clone the content from the template and append it to the wrapper
+      const content = template.content.cloneNode(true);
+      wrapper.appendChild(content);
+      // Remove the template tag after loading
+      template.remove();
+      // Optional: Add a class to indicate the component has been loaded
+      wrapper.classList.add('loaded');
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('.lazy-load-wrapper').forEach((wrapper) => {
+    const strategy = wrapper.dataset.strategy;
+
+    if (strategy === 'viewport') {
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          // When the component is intersecting (i.e., in the viewport)
+          if (entry.isIntersecting) {
+            loadComponent(wrapper);
+            // Stop observing this element since it's already loaded
+            observer.unobserve(wrapper);
+          }
+        });
+      }, {
+        rootMargin: wrapper.dataset.rootMargin || '0px'
+      });
+
+      // Start observing the wrapper element
+      observer.observe(wrapper);
+    } else if (strategy === 'scroll') {
+      // Use { once: true } to automatically remove the event listener after it fires once.
+      // This is very efficient as it doesn't keep listening for scroll events.
+      const handleFirstScroll = () => {
+        if (!wrapper.classList.contains('loaded')) {
+          loadComponent(wrapper);
+        }
+      };
+      
+      window.addEventListener('scroll', handleFirstScroll, { once: true, passive: true });
+    }
+  });
+</script>
