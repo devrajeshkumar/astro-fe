@@ -62,7 +62,7 @@ const category = values.get("category");
     const div = document.getElementById("navbar-header");
     if (div) {
       const rect = div.getBoundingClientRect();
-      const isAtTop = rect.top <= 1;
+      const isAtTop = rect.top <= 3;
       if (isAtTop) {
         hamburgerButton.style.display = "block";
       } else hamburgerButton.style.display = "none";

@@ -1,6 +1,7 @@
 ---
 import SvgIcon from "@components/common/svg/SvgIcon.astro";
 import style from "./Search.module.scss";
+import { hindiTranslation } from "@constant/index";
 
 export interface Props {
   isTopNavigation?: boolean;
@@ -31,7 +32,7 @@ const resultsContainerId = `resultsContainer_${instanceId}`;
     <input
       id={searchInputId}
       type="text"
-      placeholder="Search Stocks/IPOs, Mutual Funds, Articles..."
+      placeholder={hindiTranslation?.SEARCH_ARTICLE}
       autocomplete="off"
       aria-label="Search"
       class={isTopNavigation ? style.topNavInput : style.hamburgerInput}
