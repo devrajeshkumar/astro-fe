@@ -1,0 +1,22 @@
+---
+import style from "./EndOfArticle.module.scss";
+import Typography from "@components/common/widgets/typography/Typography.astro";
+const { text } = Astro.props;
+---
+
+<div class={style["endOfArticle"]}>
+    <Typography
+        tag="p"
+        text={text}
+        changeStyle="font-size-12"
+        isLineClamp={false}
+        inLineStyle={{
+            fontStyle: "italic",
+            lineHeight: "1.33",
+            color: "#484848",
+            textAlign: "center",
+            flexShrink: "0",
+            padding: "0 4px",
+        }}
+    />
+</div>

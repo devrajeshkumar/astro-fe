@@ -25,6 +25,8 @@ import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.a
 import style from "./Article.module.scss";
 import RenderEmbeds from "./RenderEmbeds.astro";
 import TopVideos from "@components/common/topVideos/TopVideos.astro";
+import Typography from "@components/common/widgets/typography/Typography.astro";
+import EndOfArticle from "@components/common/endOfArticle/EndOfArticle.astro";
 
 const { category, msid, app, pageTarget } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
@@ -116,6 +118,9 @@ const ads = app?.response?.ads;
   </AdContainer>
   <KeywordTags data={mainData} isArticleShow={true} />
   <OneLiner />
+
+  <EndOfArticle text="आर्टिकल की समाप्ति" />
+
   <BreadCrumb isWrap={true} category="news" />
   <RelatedNews data={mainData?.editorpicks} />
   <TopVideos componentData={mainData?.rhs_widget} />
@@ -126,13 +131,22 @@ const ads = app?.response?.ads;
   />
   <SubscribeWithEmail />
 </div>
-<ContainerBox>
+<ContainerBox
+  inLineStyle={{
+    marginTop: "20px",
+    borderTop: "16px solid #F4F4F4",
+    paddingTop: "20px",
+  }}
+>
   <MgIdComponent
     scriptID={CONST.MGID_ADD_5X5}
     elementID={CONST.MGID_ADD_5X5}
     lazy={true}
   />
 </ContainerBox>
+
+<EndOfArticle text="End of Feed" />
+
 <LatestNews data={mainData?.latestSiblings} />
 
 <script define:vars={{ style }}>
