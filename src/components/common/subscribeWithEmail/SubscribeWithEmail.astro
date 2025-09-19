@@ -7,13 +7,10 @@ import style from "./SubscribeWithEmail.module.scss";
   <div class={`${style["message-box"]}`}>
     {
       (
-        // !submitEmail ? (
-        //   <strong>{`subscribe to newsletter`}</strong>
-        // ) : (
-        <div class={`${style["success"]}`}>
-          <strong>subscribe to newsletter</strong>
-          {/* <strong>Thank you for subscribing</strong> */}
-          {/* <small>We have sent you a verification email, please check your inbox.</small> */}
+       <strong id="subscribe">subscribe to newsletter</strong>
+        <div id="success" class={`${style["success"]}`} style={{ display: "none" }}>
+          <strong>Thank you for subscribing</strong>
+          <small>We have sent you a verification email, please check your inbox.</small>
         </div>
         // )
       )
@@ -36,7 +33,7 @@ import style from "./SubscribeWithEmail.module.scss";
       placeholder="Enter your Email Id"
     />
     <button class={`${style["button-box"]}`} type="submit">
-      <RightArrow arrowColor={"white"} arrowSize={"arrowHeight-11"} />
+      <RightArrow isWhiteLayout={true} />
     </button>
   </form>
 
@@ -57,6 +54,7 @@ import style from "./SubscribeWithEmail.module.scss";
     emailError.textContent = "";
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(emailInput.value.trim())) {
+      emailError.style.display = "block";
       emailError.innerHTML = `<span>Please enter a valid email address.</span>`;
       isValid = false;
     }
@@ -80,6 +78,11 @@ import style from "./SubscribeWithEmail.module.scss";
             if (res?.success) {
               const categoryCode = 330;
               window?._izq?.push(["newsLetterOptIn", categoryCode, true]);
+              const successDiv = document.getElementById("success");
+              const success = document.getElementById("subscribe");
+              successDiv.style.display = "block";
+              success.style.display = "none";
+              document.getElementById("email-error").style.display = "none";
             }
           },
         ]);
