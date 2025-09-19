@@ -5,14 +5,9 @@ import CategoryName from "@components/common/widgets/categoryName/CategoryName.a
 import AuthorDetailMobile from "@components/common/authorDetail/AuthorDetailMobile.astro";
 import Synopsis from "./Synopsis.astro";
 import KeyHighlight from "./KeyHighlight.astro";
-import SocialWidgets from "@components/common/embeds/SocialWidgets.astro";
-import TextLinkComponent from "./TextLinkComponent.astro";
-import HtmlParagraph from "./HtmlParagraph.astro";
-import RecommendedNews from "@components/common/recommendedNews/RecommendedNews.astro";
 import AdCaller from "@components/common/adcaller/AdCaller.astro";
 import CoverVDOAndImg from "./CoverVDOAndImg.astro";
 import MgIdComponent from "@components/common/mgid/MgIdComponent.astro";
-import VideoAiComponent from "@components/common/mgid/VideoAiComponent.astro";
 import CONST from "src/constant";
 import OneLiner from "@components/common/oneLiner/OneLiner.astro";
 import KeywordTags from "@components/common/widgets/keywordTags/KeywordTags.astro";
@@ -20,15 +15,6 @@ import BreadCrumb from "@components/common/breadCrumb/BreadCrumb.astro";
 import LatestNews from "@components/common/latestNews/LatestNews.astro";
 import RelatedNews from "@components/common/relatedNews/RelatedNews.astro";
 import { getDomain, getUrl } from "@utils/common";
-import YoutubeEmbed from "@components/common/youtubeEmbed/YoutubeEmbed.astro";
-import QuotesWidget from "@components/common/widgets/htmlQuotes/QuotesWidget.astro";
-import MultiVideoPlayer from "@components/reactComponents/multiVideoPlayer/MultiVideoPlayer";
-import PhotoSlideList from "@components/common/photoSlideList/PhotoSlideList.astro";
-import {
-  CATEGORY_TYPE_VIDEO_ARTICLE,
-  DEFAULT_IMAGE_MSID,
-} from "src/constant/index";
-import VideoTypeList from "./VideoTypeList.astro";
 import AdContainer from "@components/common/adcontainer/AdContainer.astro";
 import ScrollHideButtons from "@components/common/buttons/ScrollHideButtons.astro";
 import ShareIcon from "../socialShare/ShareIcon.astro";
@@ -37,8 +23,7 @@ import SubscribeWithEmail from "@components/common/subscribeWithEmail/SubscribeW
 import WebPageSchema from "@components/common/seo/schema/WebPageSchema.astro";
 import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.astro";
 import style from "./Article.module.scss";
-import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
-import GetPollUI from "@components/common/poll/GetPollUI.astro";
+import RenderEmbeds from "./RenderEmbeds.astro"
 
 const { category, msid, app } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
@@ -104,152 +89,17 @@ const ads = app?.response?.ads;
     </Fragment>
   ) : null
 }
+ 
+  {mainData?.embedData?.map((embedData, dataIndex) => (
+  <RenderEmbeds
+    embedData={embedData}
+    dataIndex={dataIndex}
+    mainData={mainData}
+    app={app}
+    msid={msid}
+  />
+))}
 
-{
-  mainData?.embedData?.map((embedData, dataIndex) => {
-    return (
-      <div
-        class={`${
-          embedData?.paraLength > 3 ? style["collapsed"] : ""
-        } ${embedData?.paraLength === 3 && embedData.ispara ? style["clipped-para"] : ""}`}
-      >
-        <VideoTypeList
-          videoType={embedData.videoType}
-          mainData={mainData}
-          aList={[mainData]}
-          MULTI_VIDEO_LIST_COUNT={1}
-        />
-        <ContainerBox>
-          {embedData?.twitterList && (
-            <LazyLoad strategy="viewport" placeholderHeight="150px">
-              <SocialWidgets
-                data={{ text: embedData?.twitterList, type: "twitter" }}
-              />
-            </LazyLoad>
-          )}
-          {embedData?.instagramList && (
-            <LazyLoad strategy="viewport" placeholderHeight="150px">
-              <SocialWidgets
-                data={{ text: embedData?.instagramList, type: "instagram" }}
-              />
-            </LazyLoad>
-          )}
-          {embedData?.fbList && (
-            <LazyLoad strategy="viewport" placeholderHeight="150px">
-              <SocialWidgets data={{ text: embedData?.fbList, type: "fb" }} />
-            </LazyLoad>
-          )}
-          {embedData?.reditList && (
-            <LazyLoad strategy="viewport" placeholderHeight="150px">
-              <SocialWidgets
-                data={{ text: embedData?.reditList, type: "reddIt" }}
-              />
-            </LazyLoad>
-          )}
-          {embedData?.iframeText && (
-            <LazyLoad strategy="viewport" placeholderHeight="150px">
-              <SocialWidgets
-                data={{ text: embedData?.iframeText, type: "iframe" }}
-              />
-            </LazyLoad>
-          )}
-          {embedData?.pollUI ? (
-            <GetPollUI items={embedData.pollUI} data={mainData?.cmsembed} />
-          ) : null}
-        </ContainerBox>
-        <TextLinkComponent
-          htmlText={embedData.htmlText}
-          iconType={embedData.iconType}
-        />
-        {embedData?.youtubeList && (
-          <LazyLoad strategy="viewport" placeholderHeight="150px">
-            <YoutubeEmbed
-              html_tag_attributes={embedData?.youtubeList}
-              type={"WITH_THUMB"}
-            />
-          </LazyLoad>
-        )}
-        {embedData?.id ? (
-          <MultiVideoPlayer
-            data={{
-              media: {
-                id: embedData?.id,
-                msid: "",
-              },
-            }}
-            index={11}
-            idx={11}
-            articleLength={1}
-            videoCount={1}
-            channelTitle={msid || embedData?.title}
-            categoryType={CATEGORY_TYPE_VIDEO_ARTICLE}
-            thumbImg={embedData?.thumbUrl}
-            msid={DEFAULT_IMAGE_MSID}
-            style={{}}
-            isMobile={true}
-            client:load
-          />
-        ) : null}
-        <QuotesWidget data={embedData.htmlQuote} />
-        <RecommendedNews data={embedData?.embedArticle} />
-        <PhotoSlideList data={embedData?.photoType?.list} />
-        <HtmlParagraph
-          htmlText={
-            embedData.htmlText
-              ? embedData.htmlText
-                  .replace(/(<!\[CDATA\[)/gm, "")
-                  .replace(/(]]>)/gm, "")
-              : ""
-          }
-          firstPara={embedData.paraLength == 1 && embedData?.ispara}
-        />
-        {embedData?.ad ? (
-          <AdContainer
-            inLineStyle={{
-              width: "300px",
-              minHeight: "250px",
-              margin: "16px auto",
-            }}
-          >
-            <AdCaller {...embedData?.ad} />
-          </AdContainer>
-        ) : null}
-        {embedData.isMGIDShow ? (
-          <MgIdComponent
-            scriptID={CONST.MGID_ADD_1X1}
-            elementID={CONST.MGID_ADD_1X1}
-            lazy={true}
-          />
-        ) : null}
-        {embedData?.isVDOAiShow ? (
-          <VideoAiComponent loadOnScroll={true} />
-        ) : null}
-        {dataIndex == 0 && !mainData.summary ? (
-          <CoverVDOAndImg
-            data={mainData?.cmsassoc || []}
-            isMediaWireStory={mainData?.isMediaWireStory}
-            mainData={mainData}
-          />
-        ) : null}
-        {dataIndex == 1 ? (
-          <RecommendedNews data={app?.response?.recommendedNews} />
-        ) : null}
-
-        {embedData.paraLength == 3 && embedData.ispara ? (
-          <div
-            id="mgid-read-more"
-            class={style["btn-wrap"]}
-            data-hidden-class={style["btn-wrap-hidden"]}
-          >
-            <button id="read-more-btn" class={style["article-read-more-btn"]}>
-              पूरा आर्टिकल पढ़ें
-            </button>
-          </div>
-        ) : null}
-      </div>
-    );
-  })
-}
 <div class={`collapsed ${style["collapsed"]}`}>
   <AdContainer
     inLineStyle={{
