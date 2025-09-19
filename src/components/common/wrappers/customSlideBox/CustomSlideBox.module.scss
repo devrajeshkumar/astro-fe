@@ -157,6 +157,7 @@
   .overflow {
     >* {
       flex: 1;
+      white-space: normal;
     }
   }
 }

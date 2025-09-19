@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "NODE_ENV=development astro dev",
+    "dev": "NODE_ENV=development astro dev --debug",
     "build": "NODE_ENV=production astro build",
     "preview": "astro preview",
     "astro": "astro"
