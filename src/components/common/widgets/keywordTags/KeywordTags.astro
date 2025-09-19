@@ -23,7 +23,7 @@ const checkSpecialCharacter = (value) => {
 {
   keytags && (
     <ContainerBox inLineStyle={{ marginBottom: "20px" }}>
-      <CustomSlideBox gridGap={10}>
+      <div class={`${style["keyBox"]}`}>
         {keytags &&
           keytags.length > 0 &&
           keytags.slice(0, 5).map((items) => {
@@ -47,7 +47,7 @@ const checkSpecialCharacter = (value) => {
               </Link>
             ) : null;
           })}
-      </CustomSlideBox>
+      </div>
     </ContainerBox>
   )
 }
