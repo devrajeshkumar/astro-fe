@@ -6,6 +6,7 @@ import SvgIcon from "@components/common/svg/SvgIcon.astro";
 import Navigation from "@components/mobile/navigation/Navigation.astro";
 import Hamburger from "@components/mobile/hamburger/Hamburger.astro";
 import SiteNavigationElement from "@components/common/seo/schema/SiteNavigationElement.astro";
+import { getDomain } from "@utils/common";
 
 const navData = await fetch(
   "https://apihindi.etnownews.com/api/getnavigation?msid=ALL&channel_id=386"
@@ -34,7 +35,7 @@ const navDataJson = await navData.json();
           <SvgIcon IconName={"LanguageSwaitchIcon"} width={20} height={20} />
         </Link>
         <>
-          <button class={`${style["header-live-tv"]}`}>
+          <button>
             <SvgIcon
               id="mobileSearchIcon"
               IconName={"searchNewIconDesktop"}
@@ -43,9 +44,9 @@ const navDataJson = await navData.json();
             />
           </button>
         </>
-        <button class={`${style["header-live-tv"]}`}>
+        <Link link={`${getDomain()}/live-tv`}`>
           <SvgIcon IconName={"livetvNewIconRed"} width={26} height={20} />
-        </button>
+        </Link>
       </div>
     </div>
 
@@ -77,8 +78,7 @@ const navDataJson = await navData.json();
   document.addEventListener("DOMContentLoaded", function () {
     const searchButton = document.getElementById("mobileSearchIcon");
     if (searchButton) {
-      searchButton.addEventListener("click", function () {
-        // window.openPopup_mobileSearchPopup();
+      searchButton.addEventListener("click", function (e) {
         PopupManager.open("mobileSearchPopup");
       });
     }
