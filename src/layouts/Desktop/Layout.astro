@@ -1,11 +1,12 @@
 ---
 import GutterAds from "@components/common/wrappers/gutterAds/GutterAds.astro";
+import AdContainer from "@components/common/adcontainer/AdContainer.astro";
 import AdCaller from "@components/common/adcaller/AdCaller.astro";
 import Header from "@components/desktop/header/Header.astro"
-import AdContainer from "@components/common/adcontainer/AdContainer.astro";
 import Footer from "@components/desktop/footer/Footer.astro";
+import Article from "@components/desktop/article/Article.astro";
 
-const { ads, pageTarget } = Astro.props;
+const { ads, pageTarget, app } = Astro.props;
 
 ---
 
@@ -35,6 +36,7 @@ const { ads, pageTarget } = Astro.props;
         />
     </AdContainer>
     <Header pageTarget={pageTarget}/>
+    <Article app={app} category={pageTarget.category} msid={pageTarget.msid} pageTarget={pageTarget} />
     <slot />
     <Footer />
 </>

@@ -7,6 +7,7 @@ import Navigation from "@components/mobile/navigation/Navigation.astro";
 import Hamburger from "@components/mobile/hamburger/Hamburger.astro";
 import SiteNavigationElement from "@components/common/seo/schema/SiteNavigationElement.astro";
 import { getDomain } from "@utils/common";
+import LazyImage from "@components/common/lazyImage/LazyImage.astro";
 
 const navData = await fetch(
   "https://apihindi.etnownews.com/api/getnavigation?msid=ALL&channel_id=386"
@@ -27,7 +28,7 @@ const navDataJson = await navData.json();
           />
         </button>
         <Link link={"/"} className={`${style["header-logo"]}`}>
-          <img src="/assets/images/ET-Now-desktop-logo.svg" alt="ET Now Swadesh" />
+          <LazyImage datasrc={'/assets/images/ET-Now-desktop-logo.svg'} alt={'ET Now Swadesh'} />
         </Link>
       </div>
       <div class={`${style["header-right"]}`}>
