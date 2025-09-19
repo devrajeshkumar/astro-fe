@@ -26,6 +26,8 @@
   line-height: normal;
   color: var(--whiteColor);
   text-transform: uppercase;
+  padding-bottom: 20px;
+  position: relative;
 }
 
 .subscribe-input {
@@ -80,10 +82,14 @@
 }
 
 .error {
-  color: #ff0000;
-  min-height: 20px;
-  font-size: 0.6875rem;
-  padding-top: 4px;
+  position: absolute;
+  bottom: 0;
+  span {
+    color: #ff0000;
+    min-height: 20px;
+    font-size: 0.6875rem;
+    padding-top: 4px;
+  }
 }
 
 .button-box {
