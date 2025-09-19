@@ -1,0 +1,29 @@
+---
+import PollBlog from "@components/reactComponents/poll/PollBlog";
+import style from "./GetPollUI.module.scss";
+const { items, data } = Astro.props;
+
+const msId = items;
+
+const embeds = data.filter(
+  (embedData) =>
+    embedData?.cmstype?.toLowerCase() === "poll" && embedData.msid == msId
+);
+---
+
+{
+  embeds.length > 0 ? (
+    <>
+      {embeds.map((embedData) => (
+        <div
+          class={`poll-clear-bth ${style["poll-clear-bth"]}`}
+          id={`ArticlePoll${msId}`}
+        >
+          <div class={style["container"]}>
+            <PollBlog data={embedData} isBg={true} />
+          </div>
+        </div>
+      ))}
+    </>
+  ) : null
+}

@@ -56,9 +56,12 @@ function MultiVideoPlayer({
   learnGp,
   isMobile = true,
 }) {
-  const contEl = isLearning
+  const [contEl] = React.useState(
+  () => isLearning
     ? "masterVideoPlayer" + data?.media?.id + type
-    : "masterVideoPlayer" + data?.media?.id;
+    : "masterVideoPlayer" + data?.media?.id
+);
+
 
   useEffect(() => {
     try {
