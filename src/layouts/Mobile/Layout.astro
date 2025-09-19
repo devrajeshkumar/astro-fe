@@ -3,43 +3,17 @@ import _get from "lodash/get";
 import Header from "@components/mobile/header/Header.astro";
 import Article from "@components/mobile/article/Article.astro";
 import TrendingStock from "@components/mobile/trendingStock/TrendingStock.astro";
-import MutualFundStrip from "@components/mobile/mutualFundStrip/MutualFundStrip.astro";
 import Footer from "@components/mobile/footer/Footer.astro";
 import BottomSticky from "@components/mobile/bottomSticky/BottomSticky.astro";
 
-const pageTarget = {
-  section: { category: "news", sub_category: "tech" },
-  page: "article",
-  msid: "12345",
-};
-
-let ad = {
-  adCode: "/21806551354/ETNow/Desktop/ArticleShow/ETNow_Desk_AS_Header",
-  divId: "div-u-id-1-2",
-  size: [
-    [728, 90],
-    [970, 90],
-    [980, 90],
-  ],
-};
-let ad2 = {
-  adCode: "/21806551354/ETNow/Desktop/ArticleShow/ETNow_Desk_AS_Header",
-  divId: "div-u-id-1-2-3",
-  size: [
-    [728, 90],
-    [970, 90],
-    [980, 90],
-  ],
-};
-const { category, msid, app } = Astro.props;
+const { pageTarget, app } = Astro.props;
 const ads = _get(app, "response.ads", {});
 ---
 
 <Fragment>
   <Header />
   <TrendingStock />
-  <!-- <MutualFundStrip /> -->
-  <Article app={app} category={category} msid={msid} />
+  <Article app={app} category={pageTarget.category} msid={pageTarget.msid} pageTarget={pageTarget} />
   <slot />
   <Footer />
   <BottomSticky stickyAds={ads?.stky} />

@@ -26,7 +26,7 @@ import style from "./Article.module.scss";
 import RenderEmbeds from "./RenderEmbeds.astro"
 import TopVideos from "@components/common/topVideos/TopVideos.astro";
 
-const { category, msid, app } = Astro.props;
+const { category, msid, app , pageTarget } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
 const ads = app?.response?.ads;
 ---
@@ -76,7 +76,7 @@ const ads = app?.response?.ads;
 <AdContainer
   inLineStyle={{ width: "300px", minHeight: "250px", marginBottom: "16px" }}
 >
-  <AdCaller {...app?.response?.ads?.atf} atf={true} />
+  <AdCaller {...app?.response?.ads?.atf} atf={true} pageTarget={pageTarget} />
 </AdContainer>
 {
   mainData?.summary ? (
@@ -98,6 +98,7 @@ const ads = app?.response?.ads;
     mainData={mainData}
     app={app}
     msid={msid}
+    pageTarget={pageTarget}
   />
 ))}
 

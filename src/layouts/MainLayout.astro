@@ -4,6 +4,7 @@ import MobileLayout from "./mobile/Layout.astro";
 import DesktopLayout from "./desktop/Layout.astro";
 import _get from "lodash/get";
 import { gtagScript, ga4TagScript } from "../scripts/ga";
+import chartbeat from "../scripts/comscoreCode";
 import {
   getCustomDimensionsSSR,
   PUBMATIC_PROFILE_ID_MWEB,
@@ -16,21 +17,13 @@ import GnsFeed from "@components/common/gnsfeed/GnsFeed.astro";
 import dataConfig from "./dataConfig";
 
 const values = Astro.url.searchParams;
-const app = Astro.props.app;
-const isAppView = values.get("isAppView");
+const { app, pageTarget, seo } = Astro.props;
 const isMobileView = values.get("isMobileView");
-
-const pageTarget = {
-  category: values.get("category"),
-  subCategory: values.get("subCategory"),
-  subSubCategory: values.get("subSubCategory"),
-  articleType: values.get("articleType"),
-  id: values.get("id"),
-};
 const seoData = _get(app, "response.sections.article_show.data.[0].seo", {});
 const customDimension: any = getCustomDimensionsSSR(app, pageTarget, seoData);
-const gaScript = `${gtagScript(customDimension?.custom_dimension)}`;
 const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverConfig.analytics.ga4TrackingId)}`;
+const section = `${pageTarget?.section?.category ?? ''}${pageTarget?.section?.sub_category ? `, ${pageTarget?.section?.sub_category}` : ''}`;
+
 ---
 
 <Fragment slot={"head"}>
@@ -44,7 +37,8 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap" as="style" />
+  <link rel="prefetch" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap" as="style" />
 
   <meta name="generator" content={Astro.generator} />
   <title>
@@ -129,7 +123,6 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
 
   </script>
   <script
-    async
     defer
     type="text/javascript"
     src={`https://watch.sociofyme.com/player/prod/sociofymeloader.js`}></script>
@@ -149,6 +142,7 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
         ? PUBMATIC_PROFILE_ID_MWEB
         : PUBMATIC_PROFILE_ID_WEB
     }/pwt.js`}></script>
+    
   <script
     defer
     set:html={`!function(f,b,e,v,n,t,s) {if(f.fbq)return;n=f.fbq=function(){n.callMethod? n.callMethod.apply(n,arguments):n.queue.push(arguments)}; if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0'; n.queue=[];t=b.createElement(e);t.async=!0; t.src=v;s=b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t,s)}(window, document,'script', 'https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '1818740488648156'); fbq('track', 'PageView');`}
@@ -183,8 +177,7 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
     isMobileView === "true" ? (
       <MobileLayout
         app={app}
-        category={pageTarget.category}
-        msid={pageTarget.id}
+        pageTarget={pageTarget}
       />
     ) : (
       <DesktopLayout
@@ -231,6 +224,29 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
   >
   </div>
   <script defer src="https://static.chartbeat.com/js/chartbeat_mab.js"></script>
+  <script defer set:html={`(function() {
+    /** CONFIGURATION START **/
+    var _sf_async_config = window._sf_async_config = (window._sf_async_config || { });
+    _sf_async_config.uid = 10538;
+    _sf_async_config.domain = 'etnownews.com'; //CHANGE THIS TO THE ROOT DOMAIN
+    _sf_async_config.flickerControl = false;
+    _sf_async_config.useCanonical = true;
+    _sf_async_config.useCanonicalDomain = true;
+    _sf_async_config.sections = '${section}' ;
+    _sf_async_config.authors = '${pageTarget.createdBy}';
+    /** CONFIGURATION END **/
+    function loadChartbeat() {
+        var e = document.createElement('script');
+    var n = document.getElementsByTagName('script')[0];
+    e.type = 'text/javascript';
+    // e.async = true;
+    e.defer = true;
+    e.src = '//static.chartbeat.com/js/chartbeat.js';;
+    n.parentNode.insertBefore(e, n);
+    }
+    loadChartbeat();
+  })()`}></script>
+  <script defer set:html={chartbeat.__html}></script>
   <script defer src="/scripts/popupManager.js" is:inline></script>
   <script defer src="/scripts/searchManager.js" is:inline></script>
   <script defer src="/scripts/accordionManager.js" is:inline></script>
