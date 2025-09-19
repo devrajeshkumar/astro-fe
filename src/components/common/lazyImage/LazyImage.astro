@@ -5,14 +5,24 @@ const {
   fallback = "https://images.etnownews.com/thumb/msid-95598012,updatedat-95598012,width-175,height-85,resizemode-75/95598012.jpg",
   className = "",
   inLineStyle = {},
+  width,
+  height,
+  useOriginalSource = false,
+  fetchpriority = "auto",
+  leadStory = false,
+  noLazy = false,
 } = Astro.props;
 ---
-
 <img
   src={datasrc}
   alt={alt}
-  loading="lazy"
+  loading={noLazy ? "eager" : "lazy"}
   onerror={`this.onerror=null;this.src='${fallback}';`}
   class={className}
   style={{ ...inLineStyle }}
+  width={width}
+  height={height}
+  fetchpriority={fetchpriority}
+  data-use-original-source={useOriginalSource}
+  data-lead-story={leadStory}
 />

@@ -64,11 +64,13 @@ const ads = app?.response?.ads;
 
 {
   mainData && (mainData.authors || mainData.updatedate || mainData.agency) ? (
-    <AuthorDetailMobile
-      byline={mainData?.Byline}
-      updatedate={`${mainData?.updatedate}`}
-      inLineStyle={{ marginBottom: "15px" }}
-    />
+    <ContainerBox inLineStyle={{ marginBottom: "15px" }}>
+      <AuthorDetailMobile
+        byline={mainData?.Byline}
+        updatedate={`${mainData?.updatedate}`}
+        inLineStyle={{}}
+      />
+    </ContainerBox>
   ) : null
 }
 

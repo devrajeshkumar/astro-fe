@@ -2,7 +2,7 @@
 import style from "./PhotoSlideList.module.scss";
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import CustomSlideBox from "@components/common/wrappers/customSlideBox/CustomSlideBox.astro";
-import HorizontalCard from "@components/common/widgets/horizontalCard/HorizontalCard.astro";
+import VerticalCard from "@components/common/widgets/verticalCard/VerticalCard.astro";
 import { getNewImageUrl, getUrl } from "src/utils/common";
 import Link from "../link/Link.astro";
 import TitleComponent from "@components/common/titleComponent/TitleComponent.astro";
@@ -11,70 +11,63 @@ const { data } = Astro.props;
 if (!data?.length) return null;
 ---
 
-<div class={`${style["box"]}`}>
-  <ContainerBox>
-    <TitleComponent
-      type={"h2"}
-      moreButtonLink={""}
-      moreButtonText={"Recommended News"}
-      fontSize={"font-size-18"}
-      fontWeight={"700"}
-      isSeprator={false}
-      isDefaultFontFamily={true}
-      changeStyle={""}
-      inLineParentStyle={{ marginBottom: "11px" }}
-    />
-    <CustomSlideBox
-      elementType={"ulBox"}
-      gridGap={32}
-      changeStyle={`${data?.length > 1 ? "width-100-50" : "singleItem"}`}
-      marginBottom={0}
-    >
-      {
-        data?.map((item, index) => {
-          if (item.cmstype.toUpperCase() === "SECTION") return null;
-          const time =
-            item.cmstype === "MEDIAVIDEO" && item.media && fetchTime(item);
+<ContainerBox>
+  <CustomSlideBox
+    elementType={"ulBox"}
+    gridGap={32}
+    changeStyle={`${data?.length > 1 ? "width-100-50" : "singleItem"}`}
+    marginBottom={0}
+  >
+    {
+      data?.map((item, index) => {
+        if (item.cmstype.toUpperCase() === "SECTION") return null;
+        const time =
+          item.cmstype === "MEDIAVIDEO" && item.media && fetchTime(item);
 
-          return (
-            <li class={style["list-items"]}>
-              <HorizontalCard
-                data={item}
-                isWhiteLayout={false}
-                isRowReverse={false}
-                getUrlConfig={{
-                  to: getUrl(item),
-                  title: item?.title,
-                }}
-                imageConfig={{
-                  style: "width-110x62",
-                  inLineStyle: {},
-                  imagePath: getNewImageUrl({
-                    msid: item?.msid,
-                    imgWidth: item?.imageWidth || 175,
-                    imgHeight: item?.imageHeight || 85,
-                  }),
-                  imgWidth: item?.imageWidth || 175,
-                  imgHeight: item?.imageHeight || 85,
-                  time: time || "",
-                }}
-                titleConfig={{
-                  style: "",
-                  inLineStyle: {},
-                  text: index + 1,
-                  tag: "h6",
-                }}
-                paraConfig={{
-                  style: "",
-                  inLineStyle: { WebkitLineClamp: "3", lineHeight: "1.3" },
-                  text: item.title || "",
-                  tag: "p",
-                }}
-              />
-            </li>
-          );
-        })
-      }
-    </CustomSlideBox>
-  </ContainerBox>
-</div>
+        return (
+          <li class={style["list-items"]}>
+            <VerticalCard
+              data={item}
+              isShowCaptionOnImage={false}
+              isWebStory={false}
+              isWhiteLayout={false}
+              getUrlConfig={{
+                to: getUrl(item),
+                title: item?.title,
+              }}
+              imageConfig={{
+                style: "",
+                inLineStyle: {},
+                iconStyle: "bottom-left",
+                imagePath: getNewImageUrl({
+                  msid: item?.msid,
+                  imgWidth: item?.imageWidth || data?.length > 1 ? 222 : 1280,
+                  imgHeight: item?.imageHeight || data?.length > 1 ? 128 : 720,
+                }),
+                imgWidth: item?.imageWidth || data?.length > 1 ? 222 : 1280,
+                imgHeight: item?.imageHeight || data?.length > 1 ? 128 : 720,
+                time: time || "",
+              }}
+              titleConfig={{
+                style: "font-size-12",
+                inLineStyle: { WebkitLineClamp: "1", lineHeight: "1.6" },
+                text: item.title || "",
+                tag: "p",
+              }}
+              paraConfig={
+                data.length === 1
+                  ? {
+                      style: "",
+                      inLineStyle: { WebkitLineClamp: "1" },
+                      text: "Photo: " + (item?.agency?.name || ""),
+                      tag: "small",
+                    }
+                  : undefined
+              }
+            />
+          </li>
+        );
+      })
+    }
+  </CustomSlideBox>
+</ContainerBox>
