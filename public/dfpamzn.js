@@ -40,8 +40,8 @@ if (typeof getCohortData === 'undefined') {
     return [];
   };
 }
- 
-  window && window.apstag && window.apstag?.init(APS_CONFIG),
+
+window && window.apstag && window.apstag?.init(APS_CONFIG),
   (tndbgmsg = (e, t = '') => {
     // console.log(
     //   '%cTNN',
@@ -112,18 +112,19 @@ if (typeof getCohortData === 'undefined') {
         query && googletag.pubads().setTargeting('demo', [query]);
         tg_ppid && googletag.pubads().setPublisherProvidedId(tg_ppid);
 
+
         googletag.pubads().setCentering(!0),
           googletag.pubads().enableSingleRequest(),
           googletag.pubads().enableAsyncRendering(),
           cohortList = getCohortData();
           cohortList && googletag.pubads().setTargeting('cdp_audience', [cohortList]);
 
-        let currentCustomParams;
+          let currentCustomParams;
           if (typeof window !== 'undefined' && window.cdpCustomParams) {
           currentCustomParams = window.cdpCustomParams;
           }
 
-        if (currentCustomParams && typeof currentCustomParams === 'object') {
+           if (currentCustomParams && typeof currentCustomParams === 'object') {
             Object.keys(currentCustomParams).forEach((key) => {
               googletag.pubads().setTargeting(key, currentCustomParams[key]);
             });
@@ -148,7 +149,7 @@ if (typeof getCohortData === 'undefined') {
         a &&
           t &&
           pubmaticOn &&
-          apstag?.fetchBids({ slots: a || [], timeout: BID_TIMEOUT }, () => {
+          window.apstag.fetchBids({ slots: a || [], timeout: BID_TIMEOUT }, () => {
             isApsDone = true;
           });
         if (
@@ -178,7 +179,7 @@ if (typeof getCohortData === 'undefined') {
         let refresh = () => {
           if (isPubDone && isApsDone) {
             googletag.cmd.push(function () {
-              apstag?.setDisplayBids(), googletag.pubads().refresh(t);
+              window.apstag.setDisplayBids(), googletag.pubads().refresh(t);
             });
           } else {
             setTimeout(refresh, 100);
@@ -213,7 +214,7 @@ var googletag = googletag || {};
       window?.addEventListener('load', function () {
         setTimeout(function () {
           adToRender('.dfp-delay');
-        }, 100);
+        }, 7000);
       });
     };
   })();
