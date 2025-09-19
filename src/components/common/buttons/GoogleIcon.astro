@@ -1,9 +1,6 @@
 ---
 import style from "./MarketsButton.module.scss";
-import SvgIcon from "@components/common/svg/SvgIcon.astro";
-import Typography from "../widgets/typography/Typography.astro";
 import Link from "../link/Link.astro";
-import { getDomain } from "@utils/common";
 import LazyImage from "../lazyImage/LazyImage.astro";
 const { changeStyle = "", inLineStyle = {}, id } = Astro.props;
 ---
@@ -11,7 +8,7 @@ const { changeStyle = "", inLineStyle = {}, id } = Astro.props;
 <Link
   className={`${style["default"]} ${style["chrome"]} ${style[changeStyle]}`}
   inLineStyle={inLineStyle}
-  link={`${getDomain()}/market-overview`}
+  link={"https://www.google.com/preferences/source?q=et%20now"}
   id={id}
 >
   <LazyImage

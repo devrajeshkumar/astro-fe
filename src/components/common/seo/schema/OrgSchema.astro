@@ -1,0 +1,52 @@
+---
+import { LOGO_MSID } from "@utils/common";
+const HindiSchemaSocialLinks = [
+  "https://twitter.com/ETNowSwadesh",
+  "https://www.facebook.com/etnowswadesh",
+  "https://www.instagram.com/etnowswadesh",
+  "https://www.youtube.com/c/etnowswadesh",
+];
+
+const hoursAvailable = {
+  "@type": "OpeningHoursSpecification",
+  opens: "09:00",
+  closes: "18:00",
+};
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  name: "ET Now Swadesh",
+  url: import.meta.env.WEBAPP_BASE_URL,
+  logo: {
+    "@type": "ImageObject",
+    url: `${
+      import.meta.env.PUBLIC_PHOTO_API
+    }/photo/msid-${LOGO_MSID}/${LOGO_MSID}.jpg`,
+    width: 600,
+    height: 60,
+  },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Plot No-FC 6, Second Floor, Film City, Noida Sector 16A,",
+    addressLocality: "Noida",
+    addressRegion: "India",
+    postalCode: "201301",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+91 – 0120 – 6634600",
+    contactType: "Customer Service",
+    areaServed: "IN",
+    availableLanguage: "Hindi",
+    hoursAvailable: hoursAvailable,
+  },
+  sameAs: HindiSchemaSocialLinks,
+};
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+  slot="head"
+/>
