@@ -111,7 +111,7 @@ const ads = app?.response?.ads;
   >
     <AdCaller {...ads?.btf1} />
   </AdContainer>
-  <KeywordTags data={mainData} />
+  <KeywordTags data={mainData} isArticleShow={true} />
   <OneLiner />
   <BreadCrumb isWrap={true} category="news" />
   <RelatedNews data={mainData?.editorpicks} />

@@ -1,6 +1,9 @@
 ---
 import Link from "@components/common/link/Link.astro";
 import style from "./KeywordTags.module.scss";
+import CustomSlideBox from "@components/common/wrappers/customSlideBox/CustomSlideBox.astro";
+import Typography from "@components/common/widgets/typography/Typography.astro";
+import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 const { data, isArticleShow = false } = Astro.props;
 
 if (!data?.keywords) {
@@ -19,28 +22,32 @@ const checkSpecialCharacter = (value) => {
 
 {
   keytags && (
-    <div
-      class={`${style["keyTags"]} ${data.keywords.length === 2 ? style["pl-15"] : ""} ${isArticleShow ? style["article-padding"] : ""}`}
-    >
-      <div class={style["keyTagsStyle"]}>
+    <ContainerBox inLineStyle={{ marginBottom: "20px" }}>
+      <CustomSlideBox>
         {keytags &&
           keytags.length > 0 &&
           keytags.slice(0, 5).map((items) => {
             return !checkSpecialCharacter(items?.name) && items?.keywordseo ? (
               <Link
-                class={style["anchor"]}
-                key={items.id}
-                to={`${import.meta.env.WEBAPP_BASE_URL}/topic/${items.keywordseo.toLowerCase()}`}
+                className={style["keytag"]}
+                link={`${import.meta.env.WEBAPP_BASE_URL}/topic/${items.keywordseo.toLowerCase()}`}
               >
-                <div
-                  class={`anchor keytag ${style["f-s-14"]} ${style["anchor"]} ${style["mb-5"]} ${style["keytag"]} `}
-                >
-                  {items?.name}
-                </div>
+                <Typography
+                  tag="p"
+                  text={items?.name}
+                  changeStyle={"font-size-13"}
+                  isLineClamp={false}
+                  isWhiteLayout={false}
+                  inLineStyle={{
+                    fontWeight: "400",
+                    lineHeight: "inherit",
+                    color: "inherit",
+                  }}
+                />
               </Link>
             ) : null;
           })}
-      </div>
-    </div>
+      </CustomSlideBox>
+    </ContainerBox>
   )
 }
