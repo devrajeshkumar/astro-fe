@@ -1,6 +1,6 @@
 ---
 const { scriptID, elementID, isAppView = false  , lazy = false} = Astro.props;
-const rootId = `M863117ScriptRootC${elementID}`;
+const rootId = `M912820ScriptRootC${elementID}`;
 ---
 
 {
@@ -13,7 +13,7 @@ const rootId = `M863117ScriptRootC${elementID}`;
 }
 <script is:inline define:vars={{ rootId, scriptID, lazy }}>  
 function loadOnscroll() {
-    const scriptSrc = `https://jsc.mgid.com/e/t/etnownews.com.${scriptID}.js`;
+    const scriptSrc = `https://jsc.mgid.com/e/t/etnownewshindi.com.${scriptID}.js`;
     const rootEl = document.getElementById(rootId);
     if (rootEl) {
       const script = document.createElement("script");
