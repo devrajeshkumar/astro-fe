@@ -428,10 +428,16 @@ const shouldLazyLoad = !atf && !isSkiplazyload && !isGlance;
       currentCustomParams = pageTarget?.customParams,
       query = pageTarget?.query && Object.values(pageTarget?.query)[0];
 
-    if (window?.apstag && window.APS_CONFIG) {
-      window.apstag.init(window.APS_CONFIG);
-    }
+     let BID_TIMEOUT = 2000;
+     let APS_CONFIG = {
+      pubID: "2202a6a5-32cd-4e86-a8b6-48b0a3829463",
+      adServer: "googletag",
+      bidTimeout: BID_TIMEOUT,
+    };
 
+    if (window?.apstag && APS_CONFIG) {
+      window.apstag.init(APS_CONFIG);
+    }
     let slotID = { slotID: divId, sizes: size, slotName: adCode };
 
     window.googletag = window.googletag || { cmd: [] };

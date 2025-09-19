@@ -252,7 +252,6 @@ const renderAdvertisementLazy = function (options) {
 * Auto-init: Find all .ad-slot elements and lazyload them
 */
 const initAds = function () {
- 
   var googletag = window.googletag || {};
   googletag.cmd = googletag.cmd || [];
   const adToRender = (adSelector) => {
