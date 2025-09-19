@@ -1,0 +1,19 @@
+---
+import style from "./MarketsButton.module.scss";
+import Link from "../link/Link.astro";
+import LazyImage from "../lazyImage/LazyImage.astro";
+const { changeStyle = "", inLineStyle = {}, id } = Astro.props;
+---
+
+<Link
+  className={`${style["default"]} ${style["chrome"]} ${style[changeStyle]}`}
+  inLineStyle={inLineStyle}
+  link={"https://www.google.com/preferences/source?q=et%20now"}
+  id={id}
+>
+  <LazyImage
+    datasrc="/assets/images/google-cta.gif"
+    alt="Google CTA"
+    inLineStyle={{}}
+  />
+</Link>

@@ -2,7 +2,7 @@
 import TitleComponent from "./TitleComponent.astro";
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import CategoryName from "@components/common/widgets/categoryName/CategoryName.astro";
-import AuthorDetailMobile from "./AuthorDetailMobile.astro";
+import AuthorDetailMobile from "@components/common/authorDetail/AuthorDetailMobile.astro";
 import Synopsis from "./Synopsis.astro";
 import KeyHighlight from "./KeyHighlight.astro";
 import SocialWidgets from "@components/common/embeds/SocialWidgets.astro";
@@ -36,8 +36,9 @@ import { processReadingTime } from "@utils/common";
 import SubscribeWithEmail from "@components/common/subscribeWithEmail/SubscribeWithEmail.astro";
 import WebPageSchema from "@components/common/seo/schema/WebPageSchema.astro";
 import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.astro";
-const { category, msid, app } = Astro.props;
+import style from "./Article.module.scss";
 
+const { category, msid, app } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
 const ads = app?.response?.ads;
 ---
@@ -64,11 +65,13 @@ const ads = app?.response?.ads;
 
 {
   mainData && (mainData.authors || mainData.updatedate || mainData.agency) ? (
-    <AuthorDetailMobile
-      byline={mainData?.Byline}
-      updatedate={`${mainData?.updatedate}`}
-      inLineStyle={{ marginBottom: "15px" }}
-    />
+    <ContainerBox inLineStyle={{ marginBottom: "15px" }}>
+      <AuthorDetailMobile
+        byline={mainData?.Byline}
+        updatedate={`${mainData?.updatedate}`}
+        inLineStyle={{}}
+      />
+    </ContainerBox>
   ) : null
 }
 
@@ -101,121 +104,160 @@ const ads = app?.response?.ads;
 }
 
 {
-  mainData?.embedData?.map((embedData, dataIndex) => (
-    <Fragment>
-      <VideoTypeList
-        videoType={embedData.videoType}
-        mainData={mainData}
-        aList={[mainData]}
-        MULTI_VIDEO_LIST_COUNT={1}
-      />
-      <ContainerBox>
-        <SocialWidgets
-          data={{ text: embedData?.twitterList, type: "twitter" }}
-        />
-        <SocialWidgets
-          data={{ text: embedData?.instagramList, type: "instagram" }}
-        />
-        <SocialWidgets data={{ text: embedData?.fbList, type: "fb" }} />
-        <SocialWidgets data={{ text: embedData?.reditList, type: "reddIt" }} />
-        <SocialWidgets data={{ text: embedData?.iframeText, type: "iframe" }} />
-      </ContainerBox>
-      <TextLinkComponent
-        htmlText={embedData.htmlText}
-        iconType={embedData.iconType}
-      />
-      <YoutubeEmbed
-        html_tag_attributes={embedData?.youtubeList}
-        type={"WITH_THUMB"}
-      />
-      {embedData?.id ? (
-        <MultiVideoPlayer
-          data={{
-            media: {
-              id: embedData?.id,
-              msid: "",
-            },
-          }}
-          index={11}
-          idx={11}
-          articleLength={1}
-          videoCount={1}
-          channelTitle={msid || embedData?.title}
-          categoryType={CATEGORY_TYPE_VIDEO_ARTICLE}
-          thumbImg={embedData?.thumbUrl}
-          msid={DEFAULT_IMAGE_MSID}
-          style={{}}
-          isMobile={true}
-          client:load
-        />
-      ) : null}
-      <QuotesWidget data={embedData.htmlQuote} />
-      <RecommendedNews data={embedData?.embedArticle} />
-      <PhotoSlideList data={embedData?.photoType?.list} />
-      <HtmlParagraph
-        htmlText={
-          embedData.htmlText
-            ? embedData.htmlText
-                .replace(/(<!\[CDATA\[)/gm, "")
-                .replace(/(]]>)/gm, "")
-            : ""
-        }
-        firstPara={embedData.paraLength == 1 && embedData?.ispara}
-      />
-      {embedData?.ad ? (
-        <AdContainer
-          inLineStyle={{
-            width: "300px",
-            minHeight: "250px",
-            margin: "16px auto",
-          }}
-        >
-          <AdCaller {...embedData?.ad} />
-        </AdContainer>
-      ) : null}
-      {embedData.isMGIDShow ? (
-        <MgIdComponent
-          scriptID={CONST.MGID_ADD_1X1}
-          elementID={CONST.MGID_ADD_1X1}
-          lazy={true}
-        />
-      ) : null}
-      {embedData?.isVDOAiShow ? <VideoAiComponent loadOnScroll={true} /> : null}
-      {dataIndex == 0 && !mainData.summary ? (
-        <CoverVDOAndImg
-          data={mainData?.cmsassoc || []}
-          isMediaWireStory={mainData?.isMediaWireStory}
+  mainData?.embedData?.map((embedData, dataIndex) => {
+    return (
+      <div
+        class={`${
+          embedData?.paraLength > 3 ? style["collapsed"] : ""
+        } ${embedData?.paraLength === 3 && embedData.ispara ? style["clipped-para"] : ""}`}
+      >
+        <VideoTypeList
+          videoType={embedData.videoType}
           mainData={mainData}
+          aList={[mainData]}
+          MULTI_VIDEO_LIST_COUNT={1}
         />
-      ) : null}
-      {dataIndex == 1 ? (
-        <RecommendedNews data={app?.response?.recommendedNews} />
-      ) : null}
-    </Fragment>
-  ))
+        <ContainerBox>
+          <SocialWidgets
+            data={{ text: embedData?.twitterList, type: "twitter" }}
+          />
+          <SocialWidgets
+            data={{ text: embedData?.instagramList, type: "instagram" }}
+          />
+          <SocialWidgets data={{ text: embedData?.fbList, type: "fb" }} />
+          <SocialWidgets
+            data={{ text: embedData?.reditList, type: "reddIt" }}
+          />
+          <SocialWidgets
+            data={{ text: embedData?.iframeText, type: "iframe" }}
+          />
+        </ContainerBox>
+        <TextLinkComponent
+          htmlText={embedData.htmlText}
+          iconType={embedData.iconType}
+        />
+        <YoutubeEmbed
+          html_tag_attributes={embedData?.youtubeList}
+          type={"WITH_THUMB"}
+        />
+        {embedData?.id ? (
+          <MultiVideoPlayer
+            data={{
+              media: {
+                id: embedData?.id,
+                msid: "",
+              },
+            }}
+            index={11}
+            idx={11}
+            articleLength={1}
+            videoCount={1}
+            channelTitle={msid || embedData?.title}
+            categoryType={CATEGORY_TYPE_VIDEO_ARTICLE}
+            thumbImg={embedData?.thumbUrl}
+            msid={DEFAULT_IMAGE_MSID}
+            style={{}}
+            isMobile={true}
+            client:load
+          />
+        ) : null}
+        <QuotesWidget data={embedData.htmlQuote} />
+        <RecommendedNews data={embedData?.embedArticle} />
+        <PhotoSlideList data={embedData?.photoType?.list} />
+        <HtmlParagraph
+          htmlText={
+            embedData.htmlText
+              ? embedData.htmlText
+                  .replace(/(<!\[CDATA\[)/gm, "")
+                  .replace(/(]]>)/gm, "")
+              : ""
+          }
+          firstPara={embedData.paraLength == 1 && embedData?.ispara}
+        />
+        {embedData?.ad ? (
+          <AdContainer
+            inLineStyle={{
+              width: "300px",
+              minHeight: "250px",
+              margin: "16px auto",
+            }}
+          >
+            <AdCaller {...embedData?.ad} />
+          </AdContainer>
+        ) : null}
+        {embedData.isMGIDShow ? (
+          <MgIdComponent
+            scriptID={CONST.MGID_ADD_1X1}
+            elementID={CONST.MGID_ADD_1X1}
+            lazy={true}
+          />
+        ) : null}
+        {embedData?.isVDOAiShow ? (
+          <VideoAiComponent loadOnScroll={true} />
+        ) : null}
+        {dataIndex == 0 && !mainData.summary ? (
+          <CoverVDOAndImg
+            data={mainData?.cmsassoc || []}
+            isMediaWireStory={mainData?.isMediaWireStory}
+            mainData={mainData}
+          />
+        ) : null}
+        {dataIndex == 1 ? (
+          <RecommendedNews data={app?.response?.recommendedNews} />
+        ) : null}
+
+        {embedData.paraLength == 3 && embedData.ispara ? (
+          <div
+            id="mgid-read-more"
+            class={style["btn-wrap"]}
+            data-hidden-class={style["btn-wrap-hidden"]}
+          >
+            <button id="read-more-btn" class={style["article-read-more-btn"]}>
+              पूरा आर्टिकल पढ़ें
+            </button>
+          </div>
+        ) : null}
+      </div>
+    );
+  })
 }
-<AdContainer
-  inLineStyle={{
-    width: "300px",
-    minHeight: "250px",
-    margin: "16px auto",
-  }}
->
-  <AdCaller {...ads?.btf1} />
-</AdContainer>
-<KeywordTags data={mainData} />
-<OneLiner />
-<BreadCrumb isWrap={true} category="news" />
-<RelatedNews data={mainData?.editorpicks} />
-<ShareIcon
-  mainData={mainData}
-  type={"BOTTOM_SHARE_ICONS"}
-  followus="ET_HINDI"
-/>
-<SubscribeWithEmail />
+<div class={`collapsed ${style["collapsed"]}`}>
+  <AdContainer
+    inLineStyle={{
+      width: "300px",
+      minHeight: "250px",
+      margin: "16px auto",
+    }}
+  >
+    <AdCaller {...ads?.btf1} />
+  </AdContainer>
+  <KeywordTags data={mainData} />
+  <OneLiner />
+  <BreadCrumb isWrap={true} category="news" />
+  <RelatedNews data={mainData?.editorpicks} />
+  <ShareIcon
+    mainData={mainData}
+    type={"BOTTOM_SHARE_ICONS"}
+    followus="ET_HINDI"
+  />
+  <SubscribeWithEmail />
+</div>
 <MgIdComponent
   scriptID={CONST.MGID_ADD_5X5}
   elementID={CONST.MGID_ADD_5X5}
   lazy={true}
 />
 <LatestNews data={mainData?.latestSiblings} />
+
+<script define:vars={{ style }}>
+  const handleReadMoreClick = () => {
+    const readMoreButton = document.getElementById("mgid-read-more");
+    readMoreButton?.addEventListener("click", () => {
+      const paras = document.querySelectorAll(`.${style["collapsed"]}`);
+      paras?.forEach((element) => element.classList.remove(style["collapsed"]));
+      readMoreButton?.style?.display = "none";
+      readMoreButton?.style?.height = "0px";
+    });
+  };
+  handleReadMoreClick();
+</script>

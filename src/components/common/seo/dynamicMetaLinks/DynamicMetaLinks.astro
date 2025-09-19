@@ -6,12 +6,11 @@ import {
   seoDefaultMeta,
   getNewImageUrl,
 } from  "../../../../utils/common";
-
-import OrgSchema from "../schema/OrgSchema"
+import OrgSchema from "../schema/OrgSchema.astro"
 import OrgSchemaMicrosite from "../schema/OrgSchemaMicrosite"
 import WebSite from "../schema/Website";
 
-const { data = {}, channelId, status, pathname, isAmp = false } = Astro.props;
+const { data = {}, status, isAmp = false } = Astro.props;
 
 function generateTags(seoObject) {
   if (seoObject?.metaTags instanceof Array) {
@@ -161,8 +160,7 @@ canonical === '/market-in-minutes/' ? (
     </script>
   </>
 ) : (
-  <script type="application/ld+json" is:inline set:html={JSON.stringify(OrgSchema())}>
-  </script>
+  <OrgSchema/>
 )}
 
 {seoObject?.fromPage === 'home' && (

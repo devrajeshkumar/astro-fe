@@ -1,0 +1,77 @@
+---
+import style from './AuthorDetailMobile.module.scss';
+import Typography from '../widgets/typography/Typography.astro';
+import { getDomain } from '@utils/common';
+ const {
+    changeStyle = '',
+    inLineStyle = {},
+    updatedate,
+    byline,
+  } = Astro.props;
+    const formattedText = Object.entries(byline)
+    .map(([key, arr]) => {
+      const names = arr
+        .map(
+          (item) =>
+            `<a href="${getDomain()}/author/${item.seoname}-${item.id}" style="color: #292929;">${item.name}</a>`,
+        )
+        .join('');
+      return `${key}: ${names}`;
+    })
+---
+ 
+
+    <div class={`${style?.author ?? ''} ${changeStyle ? style[changeStyle] ?? '' : ''}`} style={{ ...inLineStyle }}>
+      {formattedText?.[0] && (
+        <Typography
+          tag="p"
+          text={formattedText[0]}
+          changeStyle={'font-size-12'}
+          isLineClamp={false}
+          isWhiteLayout={false}
+          inLineStyle={{
+            fontWeight: '400',
+          }}
+        />
+      )}
+      {formattedText?.[1] && (
+        <>
+          <span class={`${style['author-separator']}`}></span>
+          <Typography
+            tag="p"
+            text={formattedText[1]}
+            changeStyle={'font-size-12'}
+            isLineClamp={false}
+            isWhiteLayout={false}
+            inLineStyle={{
+              fontWeight: '400',
+            }}
+          />
+        </>
+      )}
+      {updatedate && (
+        <Typography
+          tag="p"
+          text={
+            (formattedText?.length > 0 ? 'Updated ' : '') +
+            new Date(Number(updatedate))?.toLocaleString('en-IN', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            }) +
+            ' IST'
+          }
+          changeStyle={'font-size-12'}
+          isLineClamp={false}
+          isWhiteLayout={false}
+          inLineStyle={{
+            fontWeight: '400',
+          }}
+        />
+      )}
+    </div>
+
+ 

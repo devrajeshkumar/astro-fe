@@ -389,3 +389,12 @@ export const HDFC_CTR = {
 };
 export const isValidUrlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
 export const ET_HINDI_LOGO_MSID = 111599358;
+export const hindiTranslation = {
+  SEARCH_ARTICLE: 'सर्च आर्टिकल, वीडियो, गैलरी, शेयर और बहुत कुछ...',
+  SEARCH: 'सर्च',
+  SIGN_IN: 'साइन इन करें',
+  LIVE_TV: 'लाइव टीवी',
+  WATCH_LIVE: 'लाइव देखें',
+  WELCOME: 'वेलकम',
+  LIVE: 'लाइव',
+};

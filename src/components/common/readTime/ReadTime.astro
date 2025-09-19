@@ -14,7 +14,6 @@ const { changeStyle = "", inLineStyle = {}, time } = Astro.props;
     tag="span"
     text={`${time} ${time > 1 ? "Mins" : "Min"} Read`}
     changeStyle="font-size-12"
-    isConditionalRendering={true}
     isLineClamp={false}
     inLineStyle={{
       lineHeight: "normal",

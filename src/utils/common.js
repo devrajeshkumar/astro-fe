@@ -410,7 +410,7 @@ export const IMG_DEFAULT = `${
 export const DEFAULT_IMAGE_WIDTH = 200;
 export const DEFAULT_IMAGE_HEIGHT = 200;
 
-export const LOGO_MSID = 111599270;
+export const LOGO_MSID = 111599358;
 
 export const ampGA4 = (ga4Id) => {
   let ampGA4DefaultScript = {
