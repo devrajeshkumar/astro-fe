@@ -1,5 +1,4 @@
 ---
-import VideoTypeList from "./VideoTypeList.astro";
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import SocialWidgets from "@components/common/embeds/SocialWidgets.astro";
 import GetPollUI from "@components/common/poll/GetPollUI.astro";
@@ -17,6 +16,7 @@ import VideoAiComponent from "@components/common/mgid/VideoAiComponent.astro";
 import CoverVDOAndImg from "./CoverVDOAndImg.astro";
 import style from "./Article.module.scss";
 import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
+import VideoSlideList from "@components/common/videoSlideList/VideoSlideList.astro";
 
 const { embedData, dataIndex, mainData, app, msid } = Astro.props;
 ---
@@ -27,7 +27,7 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
   } ${embedData?.paraLength === 3 && embedData.ispara ? style["clipped-para"] : ""}`}
 >
   <!-- Example: Video Type -->
-  <VideoTypeList
+  <VideoSlideList
     videoType={embedData.videoType}
     mainData={mainData}
     aList={[mainData]}
