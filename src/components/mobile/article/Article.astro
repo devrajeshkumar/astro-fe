@@ -134,6 +134,8 @@ const ads = app?.response?.ads;
     const readMoreDiv = document.getElementById("mgid-read-more");
     readMoreButton?.addEventListener("click", () => {
       const paras = document.querySelectorAll(`.${style["collapsed"]}`);
+      const clipedPara = document.querySelector(`.${style["clipped-para"]}`);
+      clipedPara.classList.remove(style["clipped-para"])
       paras?.forEach((element) => element.classList.remove(style["collapsed"]));
       readMoreDiv.style.display = "none";
       readMoreDiv.style.height = "0px";

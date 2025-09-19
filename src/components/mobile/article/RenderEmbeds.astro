@@ -37,7 +37,7 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
   <ContainerBox>
     {
       embedData?.twitterList && (
-        <LazyLoad strategy="viewport" placeholderHeight="150px">
+        <LazyLoad strategy="viewport">
           <SocialWidgets
             data={{ text: embedData?.twitterList, type: "twitter" }}
           />
@@ -46,7 +46,7 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
     }
     {
       embedData?.instagramList && (
-        <LazyLoad strategy="viewport" placeholderHeight="150px">
+        <LazyLoad strategy="viewport">
           <SocialWidgets
             data={{ text: embedData?.instagramList, type: "instagram" }}
           />
@@ -55,14 +55,14 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
     }
     {
       embedData?.fbList && (
-        <LazyLoad strategy="viewport" placeholderHeight="150px">
+        <LazyLoad strategy="viewport">
           <SocialWidgets data={{ text: embedData?.fbList, type: "fb" }} />
         </LazyLoad>
       )
     }
     {
       embedData?.reditList && (
-        <LazyLoad strategy="viewport" placeholderHeight="150px">
+        <LazyLoad strategy="viewport">
           <SocialWidgets
             data={{ text: embedData?.reditList, type: "reddit" }}
           />
@@ -71,7 +71,7 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
     }
     {
       embedData?.iframeText && (
-        <LazyLoad strategy="viewport" placeholderHeight="150px">
+        <LazyLoad strategy="viewport">
           <SocialWidgets
             data={{ text: embedData?.iframeText, type: "iframe" }}
           />
@@ -80,7 +80,7 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
     }
     {
       embedData?.pollUI && (
-        <LazyLoad strategy="viewport" placeholderHeight="150px">
+        <LazyLoad strategy="viewport">
           <GetPollUI items={embedData.pollUI} data={mainData?.cmsembed} />
         </LazyLoad>
       )
