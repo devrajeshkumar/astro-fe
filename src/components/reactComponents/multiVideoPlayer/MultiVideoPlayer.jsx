@@ -56,9 +56,12 @@ function MultiVideoPlayer({
   learnGp,
   isMobile = true,
 }) {
-  const contEl = isLearning
+  const [contEl] = React.useState(
+  () => isLearning
     ? "masterVideoPlayer" + data?.media?.id + type
-    : "masterVideoPlayer" + data?.media?.id;
+    : "masterVideoPlayer" + data?.media?.id
+);
+
 
   useEffect(() => {
     try {
@@ -245,7 +248,7 @@ function MultiVideoPlayer({
     <div style={{ position: !isShort ? "relative" : "", height: "100%" }}>
       {data?.media?.id ? (
         <div
-          className={isShort ? "" : style["videoContainer"]}
+          className={isShort ? "" : style?.["videoContainer"]}
           style={{ height: isShort ? "100%" : "initial" }}
         >
           <div
@@ -268,11 +271,11 @@ function MultiVideoPlayer({
                   }
             }
             id={contEl}
-            className={`${style["playerCont"]} playerContainer${data?.media?.id}`}
+            className={`${style?.["playerCont"]} playerContainer${data?.media?.id}`}
           >
             {import.meta.env.ISCOMPANION_AD_ACTIVE == "true" && !isShort && (
               <div
-                className={`${style["preroll-overlay"]} ${
+                className={`${style?.["preroll-overlay"]} ${
                   isHome ? "rhs-player" : ""
                 }`}
                 id={`preroll-overlay${data.media.id}`}

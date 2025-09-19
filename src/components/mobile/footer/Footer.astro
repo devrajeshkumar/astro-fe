@@ -6,7 +6,7 @@ import SvgIcon from "@components/common/svg/SvgIcon.astro";
 import CONST from "@constant/index";
 import Accordian from "@components/common/accordian/Accordian.astro";
 import Link from "@components/common/link/Link.astro";
-import { getUrl } from "@utils/common";
+import { getDomain, getUrl } from "@utils/common";
 import { SOCIAL_LINKS } from "@constant/index";
 
 const response = await fetch(
@@ -118,7 +118,7 @@ const footerCompanyMenu = data?.response?.[0]?.data;
       <li>
         <Link
           className={`${style["link"]}`}
-          link={`http://localhost:3000${assetMngComp?.seopath}`}
+          link={`${getDomain()}${assetMngComp?.seopath}`}
         >
           <Typography
             tag="p"
@@ -152,7 +152,6 @@ const footerCompanyMenu = data?.response?.[0]?.data;
     <div class={style["footer-menu"]}>
       {
         footerMenu.map((section : any, sectionIndex : number) => {
-          const title = section?.title;
           const links = section?.children;
 
           return (
@@ -280,8 +279,8 @@ const footerCompanyMenu = data?.response?.[0]?.data;
         >
           {
             footerCompanyMenu?.children.map((item, index) => (
-              <li key={index}>
-                <Link className={style["link"]} link={item.seopath}>
+              <li>
+                <Link className={style["link"]} link={`${getDomain()}/${item.seopath}`}>
                   <SvgIcon
                     IconName={"rightArrowIconGrey"}
                     width="6"

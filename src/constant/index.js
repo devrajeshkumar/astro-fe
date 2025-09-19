@@ -398,3 +398,6 @@ export const hindiTranslation = {
   WELCOME: 'वेलकम',
   LIVE: 'लाइव',
 };
+
+export const POLL_API_POST = `https://api.etnownews.com/api/poll/submit`;
+export const POLL_API_GET = `https://api.etnownews.com/api/poll/get?msid=`;
