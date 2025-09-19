@@ -7,19 +7,19 @@ if (!html_tag_attributes) return null;
 
 {
   type === "WITH_THUMB" ? (
-    <div className={`${style["article-paragraph-video"]} ${style["mb-5"]}`}>
+    <div class={`${style["article-paragraph-video"]} ${style["mb-5"]}`}>
       <iframe
         src={`https://www.youtube.com/embed/${html_tag_attributes?.id}`}
         title={`${html_tag_attributes?.title}`}
-        frameBorder="0"
+        frameborder="0"
         allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
+        allowfullscreen
       />
     </div>
   ) : (
-    <div className={style["container"]}>
-      <div className={`${style["youtube_cover"]} ${style["d-flex"]}`}>
-        <div className={style["youtubeicon"]}>
+    <div class={style["container"]}>
+      <div class={`${style["youtube_cover"]} ${style["d-flex"]}`}>
+        <div class={style["youtubeicon"]}>
           <SvgIcon IconName="YoutubeIcon" />
         </div>
         <a
