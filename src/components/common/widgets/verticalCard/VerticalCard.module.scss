@@ -1,0 +1,61 @@
+.figure {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+
+  &.caption-on-image {
+    border-radius: 6px;
+  }
+}
+
+.gap {
+  gap: 10px 0px;
+}
+
+.figcaption {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin: 0;
+}
+
+.column-reverse {
+  flex-direction: column-reverse;
+}
+
+.caption-on-image {
+  position: relative;
+  max-width: 100%;
+
+  .figcaption {
+    position: absolute;
+    bottom: 0px;
+    padding: 0 10px 10px 10px;
+    background-image: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0) 1%,
+        #151515 99%);
+
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.caption-on-image-inline {
+  @extend .caption-on-image;
+
+  .figcaption {
+    flex-direction: row;
+    gap: 0 10px;
+    align-items: center;
+  }
+}
+
+.link-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}

@@ -49,7 +49,7 @@ const isLinkDisabled = !getUrlConfig?.to;
 {isIndividualLinks ? (
   <figure class={figureClass} style={inLineStyle}>
     {isImage && (
-      <Link link={getUrlConfig?.to} title={getUrlConfig?.title} class={styles['link-wrap']}>
+      <Link link={getUrlConfig?.to} title={getUrlConfig?.title} className={styles['link-wrap']}>
         <ImageWithIcon
           cmsType={data?.cmstype || ''}
           data={data}
@@ -93,7 +93,7 @@ const isLinkDisabled = !getUrlConfig?.to;
         />
       )}
 
-      <Link link={getUrlConfig?.to} title={getUrlConfig?.title} class={styles['link-wrap']}>
+      <Link link={getUrlConfig?.to} title={getUrlConfig?.title} className={styles['link-wrap']}>
         {titleConfig?.text?.length > 0 && (
           <Typography
             cmsType={data?.cmstype || ''}
@@ -142,7 +142,7 @@ const isLinkDisabled = !getUrlConfig?.to;
     </figcaption>
   </figure>
 ) : (
-  <Link link={getUrlConfig?.to} title={getUrlConfig?.title} class={styles['link-wrap']}>
+  <Link link={getUrlConfig?.to} title={getUrlConfig?.title} className={styles['link-wrap']}>
     <figure class={figureClass} style={inLineStyle}>
       {isImage && (
         <ImageWithIcon
