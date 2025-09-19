@@ -18,7 +18,7 @@ import style from "./Article.module.scss";
 import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
 import VideoSlideList from "@components/common/videoSlideList/VideoSlideList.astro";
 
-const { embedData, dataIndex, mainData, app, msid } = Astro.props;
+const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
 ---
 
 <div
@@ -139,7 +139,7 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
           margin: "16px auto",
         }}
       >
-        <AdCaller {...embedData?.ad} />
+        <AdCaller {...embedData?.ad} pageTarget={pageTarget}/>
       </AdContainer>
     )
   }
