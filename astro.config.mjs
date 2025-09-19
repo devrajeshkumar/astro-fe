@@ -40,11 +40,11 @@ const config = {
       },
     },
     css: {
-      modules: {
-        generateScopedName: isProd
-          ? "[hash:base64:6]"
-          : "[name]__[local]___[hash:base64:6]",
-      },
+      // modules: {
+      //   generateScopedName: isProd
+      //     ? "[hash:base64:6]"
+      //     : "[name]__[local]___[hash:base64:6]",
+      // },
       preprocessorOptions: {
         scss: {
           outputStyle: "compressed", 
