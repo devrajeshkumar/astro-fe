@@ -16,12 +16,10 @@ const embeds = data.filter(
     <>
       {embeds.map((embedData) => (
         <div
-          class={`poll-clear-bth ${style["poll-clear-bth"]}`}
+          class={`${style["poll-clear-bth"]}`}
           id={`ArticlePoll${msId}`}
         >
-          <div class={style["container"]}>
-            <PollBlog data={embedData} isBg={true} />
-          </div>
+          <PollBlog data={embedData} isBg={true} client:load />
         </div>
       ))}
     </>
