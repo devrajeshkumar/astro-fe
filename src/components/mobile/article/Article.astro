@@ -276,12 +276,13 @@ const ads = app?.response?.ads;
 
 <script define:vars={{ style }}>
   const handleReadMoreClick = () => {
-    const readMoreButton = document.getElementById("mgid-read-more");
+    const readMoreButton = document.getElementById("read-more-btn");
+    const readMoreDiv = document.getElementById("mgid-read-more");
     readMoreButton?.addEventListener("click", () => {
       const paras = document.querySelectorAll(`.${style["collapsed"]}`);
       paras?.forEach((element) => element.classList.remove(style["collapsed"]));
-      readMoreButton?.style?.display = "none";
-      readMoreButton?.style?.height = "0px";
+      readMoreDiv.style.display = "none";
+      readMoreDiv.style.height = "0px";
     });
   };
   handleReadMoreClick();
