@@ -96,9 +96,8 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
 
   <script id="ga4Script" set:html={ga4Script} defer async is:inline />
 
-
-  <script id="dpfscript" src="/dfpamzn.js" type="text/javascript" async defer
-  ></script>
+  <script src="/scripts/adManager.js" defer is:inline></script>
+  <script src="/scripts/adSystem.js" defer is:inline></script>
 
   <script id="apstagScript" set:html={`!(function (a9, a, p, s, t, A, g) {
     if (a[a9]) return;

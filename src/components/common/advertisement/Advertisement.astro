@@ -1,23 +1,9 @@
 ---
+// Advertisement.astro - Updated to use AdManager
 export interface Props {
-  id?: string;
-  isPrimeUser?: boolean;
-  isCTN?: boolean;
-  position?: number;
-  divId?: string;
-  adCode?: string;
-  size?: (number | number[])[];
-  widgetType?: string;
-  className?: string;
-  theme?: string;
-  adKey?: string;
-  spacing?: boolean;
-  isAndBeyound?: boolean;
-  isShortAd?: boolean;
-  isGlance?: boolean;
-  isInterstitial?: boolean;
-  atf?: boolean;
-  stickyAd?: boolean;
+  adCode: string;
+  size: (number | number[])[];
+  divId: string;
   pageTarget?: {
     section?: {
       category?: string;
@@ -32,125 +18,40 @@ export interface Props {
     query?: Record<string, any>;
     categoryString?: string;
   };
-  pathname?: string;
-  refreshRate?: number;
-  isAppView?: boolean;
-  changeStyle?: string;
-  inlineStyle?: Record<string, any>;
-  isSkiplazyload?: boolean;
-  isDelay?: boolean;
-  parentDivId?: string;
+  queryParams?: {
+    utm_source?: string;
+    utm_medium?: string;
+  };
+  className?: string;
+  lazyLoad?: boolean;
+  spacing?: boolean;
 }
 
 const {
-  id,
-  isPrimeUser = false,
-  isCTN = false,
-  position,
-  divId,
   adCode,
   size,
-  widgetType,
+  divId,
+  pageTarget = {},
+  queryParams = {},
   className = "",
-  theme = "",
-  adKey,
+  lazyLoad = false,
   spacing = true,
-  isAndBeyound = false,
-  isShortAd = false,
-  isGlance = false,
-  isInterstitial = false,
-  atf,
-  stickyAd,
-  pageTarget,
-  pathname,
-  refreshRate,
-  isAppView = false,
-  changeStyle,
-  inlineStyle = {},
-  isSkiplazyload = false,
-  isDelay = false,
-  parentDivId = "",
 } = Astro.props;
 
-// Helper functions
-function getDFPType(adCode = "") {
-  let dfpType;
-  const adCodeInCaps = adCode.toUpperCase();
-  if (adCodeInCaps) {
-    if (adCodeInCaps.indexOf("_ATF") > -1) {
-      dfpType = "atf";
-    } else if (adCodeInCaps.indexOf("_BTF") > -1) {
-      dfpType = "btf";
-    } else if (adCodeInCaps.indexOf("_MREC") > -1) {
-      dfpType = "mrec";
-    } else if (adCodeInCaps.indexOf("_MTF") > -1) {
-      dfpType = "mtf";
-    } else if (adCodeInCaps.indexOf("_FBN") > -1) {
-      dfpType = "fbn";
-    } else if (adCodeInCaps.indexOf("GLANCE") > -1) {
-      dfpType = "mrec";
-    }
-  }
-  return dfpType;
-}
-
-function getMaxHeightFromAdSize(size) {
-  if (!size || !Array.isArray(size)) return 0;
-  let maxHeight = 0;
-  size.forEach((s) => {
-    if (Array.isArray(s) && s[1] > maxHeight) {
-      maxHeight = s[1];
-    } else if (typeof s === "number" && s > maxHeight) {
-      maxHeight = s;
-    }
-  });
-  return maxHeight;
-}
-
-// Height class mapping
-const heightClassMap = {
-  50: "ads-50-h",
-  90: "ads-90-h",
-  100: "ads-100-h",
-  125: "ads-125-h",
-  200: "ads-200-h",
-  250: "ads-250-h",
-  300: "ads-280-h",
-  280: "ads-280-h",
-  600: "ads-600-h",
-};
-
-// Validation check
-const shouldRender = (isCTN && id) || (!isCTN && divId && adCode);
-if (!shouldRender || isPrimeUser) {
+// Validate required props
+if (!adCode || !divId || !size) {
+  console.warn("[Advertisement] Missing required props:", { adCode, divId, size });
   return null;
 }
 
-// Build classes
-const maxHeight = getMaxHeightFromAdSize(size);
-const heightClass = heightClassMap?.[maxHeight] || "";
-
-const adClasses = [
-  size ? "ad-div" : "",
-  adCode?.indexOf("_PPD_980") > -1 ? "hide_m mb40" : "",
-  adCode?.indexOf("_300") !== -1 ? "mrec" : "",
-  adCode?.indexOf("_728") > -1 ? "leaderboard" : "",
-  className,
-  theme === "boxed" ? "boxed" : "",
-  theme === "topStrip" ? "top-strip" : "",
-  heightClass,
-]
-  .filter(Boolean)
-  .join(" ");
-
-// Build data attributes
-const dfpType = getDFPType(adCode);
-const dataAttributes: Record<string, any> = {
-  "data-type": dfpType,
+// Build data attributes for AdManager
+const dataAttributes = {
   "data-adunit": adCode,
   "data-dimensions": JSON.stringify(size),
+  "data-lazyload": lazyLoad.toString(),
 };
 
+// Add pageTarget data attributes
 if (pageTarget?.section?.category) {
   dataAttributes["data-section"] = pageTarget.section.category;
 }
@@ -161,10 +62,10 @@ if (pageTarget?.page) {
   dataAttributes["data-pagetype"] = pageTarget.page;
 }
 if (pageTarget?.query && Object.values(pageTarget.query).length > 0) {
-  dataAttributes["data-QueryId"] = Object.values(pageTarget.query)[0];
+  dataAttributes["data-queryid"] = Object.values(pageTarget.query)[0];
 }
 if (pageTarget?.metaInfoAttr) {
-  dataAttributes["data-metaInfoAttr"] = pageTarget.metaInfoAttr;
+  dataAttributes["data-metainfoattr"] = pageTarget.metaInfoAttr;
 }
 if (pageTarget?.msid) {
   dataAttributes["data-msid"] = pageTarget.msid;
@@ -172,438 +73,72 @@ if (pageTarget?.msid) {
 if (pageTarget?.article_index) {
   dataAttributes["data-idx"] = pageTarget.article_index;
 }
-if (refreshRate) {
-  dataAttributes["data-refreshRate"] = refreshRate;
+if (pageTarget?.categoryString) {
+  dataAttributes["data-categorystring"] = pageTarget.categoryString;
 }
 
-// Container classes
-const containerClasses = [
-  isInterstitial
-    ? ""
-    : isShortAd
-      ? "shortvideo-ad bggrayAd"
-      : !stickyAd
-        ? !atf
-          ? isGlance
-            ? "bggrayAd bggrayAdGlance"
-            : "bggrayAd"
-          : "atfAdContainer"
-        : "sticky-blocked-container",
-  changeStyle || "",
-]
-  .filter(Boolean)
-  .join(" ");
+// Add query params
+if (queryParams?.utm_source) {
+  dataAttributes["data-utm_source"] = queryParams.utm_source;
+}
+if (queryParams?.utm_medium) {
+  dataAttributes["data-utm_medium"] = queryParams.utm_medium;
+}
 
-// Container styles
-const containerStyle = {
-  visibility: isAndBeyound ? "hidden" : "visible",
-  position: isAndBeyound ? "absolute" : "",
-  ...inlineStyle,
-};
+const adClasses = [
+  "dfp",
+  lazyLoad ? "lazy-ad" : "",
+  className,
+].filter(Boolean).join(" ");
 
-// Generate unique ID for lazy loading
-const lazyLoadId = `ad-lazy-${divId}-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
-
-// CRITICAL: Determine if this ad should be lazy loaded
-// Default to lazy loading UNLESS explicitly told not to
-const shouldLazyLoad = !atf && !isSkiplazyload && !isGlance;
-
-// Debug info (will be removed in production)
 ---
 
-{
-  !isAppView && (
-    <div
-      id={parentDivId || `container-${divId}`}
-      style={containerStyle}
-      class={`ad-container ${containerClasses}`}
-      data-lazy-load-id={lazyLoadId}
-      data-should-lazy-load={shouldLazyLoad.toString()}
-      data-ad-config={JSON.stringify({
-        adCode,
-        divId,
-        size,
-        pageTarget,
-        pathname,
-        isGlance,
-        isSkiplazyload,
-        isDelay,
-        shouldLazyLoad,
-        atf,
-      })}
-    >
-      {shouldLazyLoad ? (
-        <div
-          id={`${divId}-placeholder`}
-          class={`ad-placeholder ${adClasses}`}
-          style={{
-            minHeight: maxHeight ? `${maxHeight}px` : "250px",
-            // padding: !spacing ? "0px" : "8px",
-            // backgroundColor: "#f0f0f0",
-            // border: "2px dashed #ccc",
-            // display: "flex",
-            // alignItems: "center",
-            // justifyContent: "center",
-            // color: "#666",
-            // fontSize: "14px",
-            // textAlign: "center",
-            // position: "relative",
-          }}
-          {...dataAttributes}
-          data-original-div-id={divId}
-        />
-      ) : !isSkiplazyload && !isGlance ? (
-        <div
-          id={divId}
-          class={`dfp ${adClasses}`}
-          style={!spacing ? { padding: "0px" } : { padding: "8px" }}
-          {...dataAttributes}
-        />
-      ) : (
-        <div
-          id={divId}
-          class={`${isSkiplazyload && !isDelay ? "dfp" : ""} ${isDelay ? "dfp-delay" : ""} ${adClasses}`}
-          style={!spacing ? { padding: "0px" } : { padding: "8px" }}
-          {...dataAttributes}
-        />
-      )}
-    </div>
-  )
-}
+<div
+  id={divId}
+  class={adClasses}
+  {...dataAttributes}
+  data-initialized="false"
+>
+</div>
 
 <script>
-  // Global state management for ad configurations
-  if (!window.AdCallerState) {
-    window.AdCallerState = {
-      isDPFConfigSet: false,
-      isDFPTargetingSet: false,
-      CTNAdCounters: {},
-      adsCallbackDefined: false,
-      observers: new Map(),
-      initialized: false,
-    };
-  }
-
-  // Initialize lazy loading for ads
-  function initAdLazyLoading() {
-    const allContainers = document.querySelectorAll("[data-lazy-load-id]");
-    const uninitializedContainers = document.querySelectorAll(
-      "[data-lazy-load-id]:not([data-initialized])"
-    );
-    if (uninitializedContainers.length === 0) {
+  // This script runs for each Advertisement component instance
+  document.addEventListener("DOMContentLoaded", () => {
+    // Get AdManager instance
+    const adManager = window.AdManager?.getInstance();
+    if (!adManager) {
+      console.error("[Advertisement] AdManager not available");
       return;
     }
 
-    uninitializedContainers.forEach((container, index) => {
-      try {
-        const configData = container.dataset.adConfig;
-        const lazyLoadId = container.dataset.lazyLoadId;
-        const shouldLazyLoadAttr = container.dataset.shouldLazyLoad;
-
-        if (!configData) {
-          return;
-        }
-
-        const config = JSON.parse(configData);
-        // Mark as initialized immediately
-        container.dataset.initialized = "true";
-
-        // Check if should lazy load
-        if (!config.shouldLazyLoad || shouldLazyLoadAttr === "false") {
-          loadAdImmediately(container, config);
-          return;
-        }
-
-        // Setup intersection observer for lazy loading
-        if ("IntersectionObserver" in window) {
-          // Check if observer already exists
-          if (window.AdCallerState.observers.has(lazyLoadId)) {
-            return;
-          }
-
-          const observer = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                if (entry.isIntersecting && entry.intersectionRatio > 0) {
-                  loadAd(entry.target, config);
-                  observer.unobserve(entry.target);
-                  window.AdCallerState.observers.delete(lazyLoadId);
-                }
-              });
-            },
-            {
-              root: null,
-              rootMargin: "300px 0px 300px 0px",
-              threshold: [0, 0.2],
-            }
-          );
-
-          window.AdCallerState.observers.set(lazyLoadId, observer);
-          observer.observe(container);
-        } else {
-          loadAd(container, config);
-        }
-      } catch (error) {}
-    });
-  }
-
-  function loadAdImmediately(container, config) {
-    container.classList.add("ad-loaded-immediate");
-    container.title = `Loaded immediately: ${config.divId}`;
-  }
-
-  function loadAd(container, config) {
-    try {
-      const {
-        adCode,
-        divId,
-        size,
-        pageTarget,
-        pathname,
-        isGlance,
-        spacing = true,
-      } = config;
-
-      container.classList.add("ad-loading");
-      const placeholder = container.querySelector(`#${divId}-placeholder`);
-      if (!placeholder) {
-        return;
-      }
-
-      const adDiv = document.createElement("div");
-      adDiv.id = divId;
-      adDiv.className = placeholder.className
-        .replace("ad-placeholder", "")
-        .trim();
-
-      // Generate unique ID for this instance (same as Advertisement component)
-      const uniqueId = `ad-${divId}-${Math.random().toString(36).substr(2, 9)}`;
-      adDiv.setAttribute("data-unique-id", uniqueId);
-
-      // Copy all data attributes from placeholder
-      Array.from(placeholder.attributes).forEach((attr) => {
-        if (
-          attr.name.startsWith("data-") &&
-          attr.name !== "data-original-div-id"
-        ) {
-          adDiv.setAttribute(attr.name, attr.value);
-        }
-      });
-
-      placeholder.parentNode.replaceChild(adDiv, placeholder);
-      initializeAdvertisementAd(adCode, size, divId, pageTarget, uniqueId);
-
-      setTimeout(() => {
-        container.classList.remove("ad-loading");
-        container.classList.add("ad-loaded");
-        container.title = `Lazy loaded successfully: ${divId}`;
-      }, 100);
-    } catch (error) {
-      container.classList.add("ad-error");
-      container.title = `Error loading: ${config.divId}`;
-    }
-  }
-
-  function initializeAdvertisementAd(
-    adCode,
-    size,
-    divId,
-    pageTarget,
-    uniqueId
-  ) {
-    const adElement = document.querySelector(`[data-unique-id="${uniqueId}"]`);
+    // Find this component's element
+    const currentScript = document.currentScript;
+    const adElement = currentScript?.previousElementSibling;
+    
     if (!adElement || adElement.dataset.initialized === "true") {
       return;
     }
+
+    // Mark as initialized
     adElement.dataset.initialized = "true";
 
-    let SlotArr = [],
-      sec = pageTarget?.section?.category,
-      subsec = pageTarget?.section?.sub_category,
-      ptype = pageTarget?.page,
-      metaInfoAttr = pageTarget?.metaInfoAttr,
-      id = pageTarget?.msid,
-      sequence = pageTarget?.article_index,
-      cdp_audience = pageTarget?.cdp_audience,
-      currentCustomParams = pageTarget?.customParams,
-      query = pageTarget?.query && Object.values(pageTarget?.query)[0];
-
-     let BID_TIMEOUT = 2000;
-     let APS_CONFIG = {
-      pubID: "2202a6a5-32cd-4e86-a8b6-48b0a3829463",
-      adServer: "googletag",
-      bidTimeout: BID_TIMEOUT,
-    };
-
-    if (window?.apstag && APS_CONFIG) {
-      window.apstag.init(APS_CONFIG);
-    }
-    let slotID = { slotID: divId, sizes: size, slotName: adCode };
-
-    window.googletag = window.googletag || { cmd: [] };
-
-    const tg_ppid = window.getCookieValue
-      ? window.getCookieValue("tg_ppid")
-      : null;
-
-    window.googletag.cmd.push(function () {
-      let ab = adCode?.includes("_ROS_Interstitial")
-        ? window.googletag
-            ?.defineOutOfPageSlot(
-              adCode,
-              window.googletag.enums.OutOfPageFormat.INTERSTITIAL
-            )
-            ?.addService(window.googletag.pubads())
-        : window.googletag
-            ?.defineSlot(adCode, size, divId)
-            ?.addService(window.googletag.pubads());
-
-      if (!ab) {
-        return;
-      }
-      SlotArr.push(ab);
-
-      window.googletag.pubads().clearTargeting();
-
-      if (sec) {
-        window.googletag.pubads().setTargeting("section", [sec]);
-      }
-      if (subsec) {
-        window.googletag.pubads().setTargeting("subsec", [subsec]);
-      }
-      if (ptype) {
-        window.googletag.pubads().setTargeting("page", [ptype]);
-      }
-      if (metaInfoAttr) {
-        window.googletag.pubads().setTargeting("keyword", [metaInfoAttr]);
-      }
-      if (id) {
-        window.googletag.pubads().setTargeting("articleid", [id]);
-      }
-      if (sequence) {
-        window.googletag.pubads().setTargeting("article_sequence", [sequence]);
-      }
-      if (query) {
-        window.googletag.pubads().setTargeting("demo", [query]);
-      }
-      if (tg_ppid) {
-        window.googletag.pubads().setPublisherProvidedId(tg_ppid);
-      }
-      if (cdp_audience) {
-        window.googletag.pubads().setTargeting("cdp_audience", [cdp_audience]);
-      }
-
-      // Set custom params
-      if (currentCustomParams && typeof currentCustomParams === "object") {
-        Object.keys(currentCustomParams).forEach((key) => {
-          window.googletag.pubads().setTargeting(key, currentCustomParams[key]);
-        });
-      } else if (currentCustomParams) {
-      }
-
-      // Configure pubads
-      window.googletag.pubads().setCentering(true);
-      window.googletag.pubads().enableSingleRequest();
-      window.googletag.pubads().enableAsyncRendering();
-      window.googletag.pubads().setPrivacySettings({
-        restrictDataProcessing: window.getCookieValue
-          ? window.getCookieValue("privacy-policy") == 1
-          : false,
-      });
-
-      window.googletag.pubads().disableInitialLoad();
-      window.googletag.enableServices();
-    });
-
-    let isPubDone = false,
-      isApsDone = false;
-
-    window.googletag.cmd.push(function () {
-      // Display the ad
-      window.googletag.display(divId);
-
-      // Fetch bids from apstag
-      if (SlotArr && window.pubmaticOn && window.apstag) {
-        window.apstag.fetchBids(
-          { slots: [slotID] || [], timeout: window.BID_TIMEOUT || 2000 },
-          () => {
-            isApsDone = true;
-          }
-        );
-      } else {
-        isApsDone = true;
-      }
-
-      // Request bids from PWT
-      if (
-        window?.PWT?.requestBids &&
-        typeof window?.PWT?.requestBids === "function"
-      ) {
-        window.PWT.initAdserverSet = false;
-        window.PWT.setAuctionTimeout(1000);
-        window.PWT.requestBids(
-          window.PWT.generateConfForGPT(SlotArr),
-          function (adUnitsArray) {
-            window.PWT.addKeyValuePairsToGPTSlots(adUnitsArray);
-            isPubDone = true;
-          }
-        );
-      } else {
-        isPubDone = true;
-      }
-
-      // Refresh function to display ads after bidding
-      let refresh = () => {
-        if (isPubDone && isApsDone) {
-          window.googletag.cmd.push(function () {
-            if (window.apstag) {
-              window.apstag.setDisplayBids();
-            }
-            window.googletag.pubads().refresh(SlotArr);
-          });
-        } else {
-          setTimeout(refresh, 100);
-        }
+    // Extract ad data and render
+    const adData = adManager.getAdData(adElement);
+    if (adData) {
+      const options = {
+        adCode: adData.adCode,
+        size: adData.size,
+        divId: adData.divId,
+        pageTarget: adData.pageTarget,
+        queryParams: adData.queryParams
       };
 
-      refresh();
-    });
-
-    // Store cleanup function for potential manual cleanup
-    adElement._cleanupAd = function () {
-      window.googletag.cmd.push(function () {
-        window.googletag.destroySlots();
-      });
-    };
-  }
-
-  // Cleanup function
-  function cleanupObservers() {
-    window.AdCallerState.observers.forEach((observer, id) => {
-      observer.disconnect();
-    });
-    window.AdCallerState.observers.clear();
-  }
-
-  // Initialize when DOM is ready
-  function initializeWhenReady() {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => {
-        setTimeout(initAdLazyLoading, 100);
-      });
-    } else {
-      setTimeout(initAdLazyLoading, 100);
+      // Check if should lazy load
+      if (adElement.dataset.lazyload === "true" || adElement.classList.contains("lazy-ad")) {
+        adManager.setupLazyLoading(adElement, options);
+      } else {
+        adManager.renderAd(options);
+      }
     }
-  }
-
-  // Astro navigation handling
-  document.addEventListener("astro:before-swap", () => {
-    cleanupObservers();
   });
-
-  document.addEventListener("astro:after-swap", () => {
-    setTimeout(initAdLazyLoading, 200);
-  });
-
-  initializeWhenReady();
 </script>
