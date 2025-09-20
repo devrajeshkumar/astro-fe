@@ -140,18 +140,20 @@ const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
           margin: "16px auto",
         }}
       >
-        <AdCaller {...embedData?.ad} pageTarget={pageTarget}/>
+        <AdCaller {...embedData?.ad} pageTarget={pageTarget} />
       </AdContainer>
     )
   }
 
   {
     embedData.isMGIDShow && (
-      <MgIdComponent
-        scriptID={CONST.MGID_ADD_1X1_HI}
-        elementID={CONST.MGID_ADD_1X1_HI}
-        lazy={true}
-      />
+      <ContainerBox>
+        <MgIdComponent
+          scriptID={CONST.MGID_ADD_1X1_HI}
+          elementID={CONST.MGID_ADD_1X1_HI}
+          lazy={true}
+        />
+      </ContainerBox>
     )
   }
 

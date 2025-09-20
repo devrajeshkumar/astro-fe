@@ -1,11 +1,12 @@
 ---
+import style from './MgIdComponent.module.scss';
 const { scriptID, elementID, isAppView = false  , lazy = false} = Astro.props;
 const rootId = `M912820ScriptRootC${elementID}`;
 ---
 
 {
   !isAppView && (
-    <div class="mgIDWrap" id={elementID}>
+    <div class={style['mg-id-box']} id={elementID}>
       <div id={rootId}>
       </div>
     </div>
