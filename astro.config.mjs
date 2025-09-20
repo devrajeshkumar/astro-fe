@@ -10,12 +10,12 @@ const isProd = process.env.NODE_ENV === "production";
 // AMP integration - processing handled in middleware
 function ampIntegration() {
   return {
-    name: "amp-integration", 
+    name: "amp-integration",
     hooks: {
       "astro:config:setup": () => {
         console.log("🚀 AMP processing enabled via middleware");
-      }
-    }
+      },
+    },
   };
 }
 
@@ -24,18 +24,23 @@ const config = {
   adapter: node({
     mode: "standalone",
   }),
-  integrations: [
-    react(),
-    ampIntegration()
-  ],
+  integrations: [react(), ampIntegration()],
   server: {
     port: 3000,
+  },
+  compilerOptions: {
+    baseUrl: ".",
+    paths: {
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@utils/*": ["src/utils/*"],
+    },
   },
   vite: {
     resolve: {
       alias: {
         "@components": path.resolve(__dirname, "src/components"),
-        "@layouts": path.resolve(__dirname, "src/layouts"), 
+        "@layouts": path.resolve(__dirname, "src/layouts"),
         "@lib": path.resolve(__dirname, "src/lib"),
         "@utils": path.resolve(__dirname, "src/utils"),
         "@constant": path.resolve(__dirname, "src/constant"),
@@ -50,7 +55,7 @@ const config = {
       },
       preprocessorOptions: {
         scss: {
-          outputStyle: "compressed", 
+          outputStyle: "compressed",
           additionalData: `@use "src/styles/_mixins-new.scss" as *;`,
         },
       },
