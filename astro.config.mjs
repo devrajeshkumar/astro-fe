@@ -34,6 +34,8 @@ const config = {
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
       "@utils/*": ["src/utils/*"],
+      "@constant/*": ["src/constant/*"],
+      "@styles/*": ["src/styles/*"],
     },
   },
   vite: {
@@ -41,7 +43,6 @@ const config = {
       alias: {
         "@components": path.resolve(__dirname, "src/components"),
         "@layouts": path.resolve(__dirname, "src/layouts"),
-        "@lib": path.resolve(__dirname, "src/lib"),
         "@utils": path.resolve(__dirname, "src/utils"),
         "@constant": path.resolve(__dirname, "src/constant"),
         "@styles": path.resolve(__dirname, "src/styles"),
