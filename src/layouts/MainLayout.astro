@@ -183,6 +183,7 @@ const section = `${pageTarget?.section?.category ?? ''}${pageTarget?.section?.su
       <DesktopLayout
         ads={_get(app, "response.ads", {})}
         pageTarget={pageTarget}
+        app={app}
       />
     )
   }

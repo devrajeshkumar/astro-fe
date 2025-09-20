@@ -1,0 +1,187 @@
+---
+import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
+import SocialWidgets from "@components/common/embeds/SocialWidgets.astro";
+import GetPollUI from "@components/common/poll/GetPollUI.astro";
+import TextLinkComponent from "@components/mobile/article/TextLinkComponent.astro";
+import YoutubeEmbed from "@components/common/youtubeEmbed/YoutubeEmbed.astro";
+import MultiVideoPlayer from "@components/reactComponents/multiVideoPlayer/MultiVideoPlayer";
+import QuotesWidget from "@components/common/widgets/htmlQuotes/QuotesWidget.astro";
+import RecommendedNews from "@components/common/recommendedNews/RecommendedNews.astro";
+import PhotoSlideList from "@components/common/photoSlideList/PhotoSlideList.astro";
+import HtmlParagraph from "@components/mobile/article/HtmlParagraph.astro";
+import AdContainer from "@components/common/adcontainer/AdContainer.astro";
+import AdCaller from "@components/common/adcaller/AdCaller.astro";
+import MgIdComponent from "@components/common/mgid/MgIdComponent.astro";
+import VideoAiComponent from "@components/common/mgid/VideoAiComponent.astro";
+import CoverVDOAndImg from "@components/mobile/article/CoverVDOAndImg.astro";
+import style from "@components/mobile/article/Article.module.scss";
+import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
+import VideoSlideList from "@components/common/videoSlideList/VideoSlideList.astro";
+import CONST from "@constant/index";
+
+const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
+---
+
+<div
+  class={`${
+    embedData?.paraLength > 3 ? style["collapsed"] : ""
+  } ${embedData?.paraLength === 3 && embedData.ispara ? style["clipped-para"] : ""}`}
+>
+  <!-- Example: Video Type -->
+  <VideoSlideList
+    videoType={embedData.videoType}
+    mainData={mainData}
+    aList={[mainData]}
+    MULTI_VIDEO_LIST_COUNT={1}
+  />
+
+  <ContainerBox>
+    {
+      embedData?.twitterList && (
+        <LazyLoad strategy="viewport">
+          <SocialWidgets
+            data={{ text: embedData?.twitterList, type: "twitter" }}
+          />
+        </LazyLoad>
+      )
+    }
+    {
+      embedData?.instagramList && (
+        <LazyLoad strategy="viewport">
+          <SocialWidgets
+            data={{ text: embedData?.instagramList, type: "instagram" }}
+          />
+        </LazyLoad>
+      )
+    }
+    {
+      embedData?.fbList && (
+        <LazyLoad strategy="viewport">
+          <SocialWidgets data={{ text: embedData?.fbList, type: "fb" }} />
+        </LazyLoad>
+      )
+    }
+    {
+      embedData?.reditList && (
+        <LazyLoad strategy="viewport">
+          <SocialWidgets
+            data={{ text: embedData?.reditList, type: "reddit" }}
+          />
+        </LazyLoad>
+      )
+    }
+    {
+      embedData?.iframeText && (
+        <LazyLoad strategy="viewport">
+          <SocialWidgets
+            data={{ text: embedData?.iframeText, type: "iframe" }}
+          />
+        </LazyLoad>
+      )
+    }
+    {
+      embedData?.pollUI && (
+        <LazyLoad strategy="viewport">
+          <GetPollUI items={embedData.pollUI} data={mainData?.cmsembed} />
+        </LazyLoad>
+      )
+    }
+  </ContainerBox>
+
+  <TextLinkComponent
+    htmlText={embedData.htmlText}
+    iconType={embedData.iconType}
+  />
+
+  {
+    embedData?.youtubeList && (
+      <YoutubeEmbed
+        html_tag_attributes={embedData?.youtubeList}
+        type="WITH_THUMB"
+      />
+    )
+  }
+
+  {
+    embedData?.id && (
+      <MultiVideoPlayer
+        data={{ media: { id: embedData?.id, msid: "" } }}
+        index={11}
+        idx={11}
+        articleLength={1}
+        videoCount={1}
+        channelTitle={msid || embedData?.title}
+        categoryType="VIDEO_ARTICLE"
+        thumbImg={embedData?.thumbUrl}
+        msid="DEFAULT_IMAGE_MSID"
+        isMobile={true}
+        client:load
+      />
+    )
+  }
+
+  <QuotesWidget data={embedData.htmlQuote} />
+  <RecommendedNews data={embedData?.embedArticle} />
+  <PhotoSlideList data={embedData?.photoType?.list} />
+
+  <HtmlParagraph
+    htmlText={embedData.htmlText
+      ? embedData.htmlText.replace(/(<!\[CDATA\[)/gm, "").replace(/(]]>)/gm, "")
+      : ""}
+    firstPara={embedData.paraLength == 1 && embedData?.ispara}
+  />
+
+  {
+    embedData?.ad && (
+      <AdContainer
+        inLineStyle={{
+          width: "300px",
+          minHeight: "250px",
+          margin: "16px auto",
+        }}
+      >
+        <AdCaller {...embedData?.ad} pageTarget={pageTarget} />
+      </AdContainer>
+    )
+  }
+
+  {
+    embedData.isMGIDShow && (
+      <ContainerBox>
+        <MgIdComponent
+          scriptID={CONST.MGID_ADD_1X1_HI}
+          elementID={CONST.MGID_ADD_1X1_HI}
+          lazy={true}
+        />
+      </ContainerBox>
+    )
+  }
+
+  {embedData?.isVDOAiShow && <VideoAiComponent loadOnScroll={true} />}
+
+  {
+    dataIndex == 0 && !mainData.summary && (
+      <CoverVDOAndImg
+        data={mainData?.cmsassoc || []}
+        isMediaWireStory={mainData?.isMediaWireStory}
+        mainData={mainData}
+      />
+    )
+  }
+
+  {dataIndex == 1 && <RecommendedNews data={app?.response?.recommendedNews} />}
+
+  {
+    embedData.paraLength == 3 && embedData.ispara && (
+      <div
+        id="mgid-read-more"
+        class={style["btn-wrap"]}
+        data-hidden-class={style["btn-wrap-hidden"]}
+      >
+        <button id="read-more-btn" class={style["article-read-more-btn"]}>
+          पूरा आर्टिकल पढ़ें
+        </button>
+      </div>
+    )
+  }
+</div>

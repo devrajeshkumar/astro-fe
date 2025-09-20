@@ -1,19 +1,74 @@
 ---
-import _get from "lodash/get";
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import LhsRhsWrapper from "@components/common/wrappers/lhsRhsWrapper/LhsRhsWrapper.astro";
 import style from "./Article.module.scss";
+import WebPageSchema from "@components/common/seo/schema/WebPageSchema.astro";
+import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.astro";
+import { getUrl } from "@utils/common";
+import TitleComponent from "@components/mobile/article/TitleComponent.astro";
+import Synopsis from "@components/mobile/article/Synopsis.astro";
+import AuthorDetailMobile from "@components/common/authorDetail/AuthorDetailMobile.astro";
+import CoverVDOAndImg from "@components/mobile/article/CoverVDOAndImg.astro";
+import KeyHighlight from "@components/mobile/article/KeyHighlight.astro";
+import RenderEmbeds from "@components/common/renderEmbeds/RenderEmbedsDesktop.astro";
+import AdContainer from "@components/common/adcontainer/AdContainer.astro";
+import HdfcCard from "@components/common/hdfcCard/HdfcCard.astro";
+import SubscribeWithEmail from "@components/common/subscribeWithEmail/SubscribeWithEmail.astro";
+const { category, msid, app, pageTarget } = Astro.props;
+const mainData = app?.response?.sections?.article_show?.data?.[0];
+const ads = app?.response?.ads;
 ---
 
+<WebPageSchema data={mainData} pathname={getUrl(mainData)} />
+<NewsArticleSchema data={mainData} pathname={getUrl(mainData)} />
 <ContainerBox>
-<LhsRhsWrapper>
-  <div class={style.article} slot="mid">
-    LHS goes here
-  </div>
-  <div class={style.article} slot="rhs">
-    RHS goes here
-  </div>
-</LhsRhsWrapper>
+  <TitleComponent index={0} mainData={mainData} />
+  <Synopsis text={mainData.synopsis} inLineStyle={{ marginBottom: "34px" }} />
+  <LhsRhsWrapper>
+    <div class={style.article} slot="mid">
+      <AuthorDetailMobile
+        byline={mainData?.Byline}
+        updatedate={`${mainData?.updatedate}`}
+        inLineStyle={{}}
+      />
+      <CoverVDOAndImg
+        data={mainData?.cmsassoc || []}
+        isMediaWireStory={mainData?.isMediaWireStory}
+        mainData={mainData}
+      />
+      <KeyHighlight summary={mainData.summary} />
+      {
+        mainData?.embedData?.map((embedData, dataIndex) => (
+          <RenderEmbeds
+            embedData={embedData}
+            dataIndex={dataIndex}
+            mainData={mainData}
+            app={app}
+            msid={msid}
+            pageTarget={pageTarget}
+          />
+        ))
+      }
+    </div>
+    <div class={style.article} slot="rhs">
+      <AdContainer> ads </AdContainer>
+      <HdfcCard />
+      <SubscribeWithEmail />
+    </div>
+  </LhsRhsWrapper>
 </ContainerBox>
-
-
+<script define:vars={{ style }}>
+  const handleReadMoreClick = () => {
+    const readMoreButton = document.getElementById("read-more-btn");
+    const readMoreDiv = document.getElementById("mgid-read-more");
+    readMoreButton?.addEventListener("click", () => {
+      const paras = document.querySelectorAll(`.${style["collapsed"]}`);
+      const clipedPara = document.querySelector(`.${style["clipped-para"]}`);
+      clipedPara.classList.remove(style["clipped-para"]);
+      paras?.forEach((element) => element.classList.remove(style["collapsed"]));
+      readMoreDiv.style.display = "none";
+      readMoreDiv.style.height = "0px";
+    });
+  };
+  handleReadMoreClick();
+</script>
