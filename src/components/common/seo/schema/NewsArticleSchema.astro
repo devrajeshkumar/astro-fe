@@ -80,7 +80,7 @@ const imageAmp = {
 };
 const logo = {
   "@type": "ImageObject",
-  url: `${process.env.NEXT_PUBLIC_PHOTO_API}/photo/msid-${ET_HINDI_LOGO_MSID}/${ET_HINDI_LOGO_MSID}.jpg`,
+  url: `${process.env.PUBLIC_PHOTO_API}/photo/msid-${ET_HINDI_LOGO_MSID}/${ET_HINDI_LOGO_MSID}.jpg`,
   width: 600,
   height: 60,
 };
@@ -174,7 +174,6 @@ const schema = {
   publisher: pub,
 };
 ---
-
 <script
   type="application/ld+json"
   set:html={JSON.stringify(schema)}

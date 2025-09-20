@@ -25,8 +25,8 @@ const ga4Script = `${ga4TagScript(customDimension?.GA4CustomDimensions, serverCo
 const section = `${pageTarget?.section?.category ?? ''}${pageTarget?.section?.sub_category ? `, ${pageTarget?.section?.sub_category}` : ''}`;
 
 ---
-
-<Fragment slot={"head"}>
+<html lang="hi">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link
@@ -162,8 +162,7 @@ const section = `${pageTarget?.section?.category ?? ''}${pageTarget?.section?.su
       checkScriptLoad();
     });
   </script>
-</Fragment>
-
+</head>
 <body>
   <noscript>
     <iframe
@@ -251,3 +250,4 @@ const section = `${pageTarget?.section?.category ?? ''}${pageTarget?.section?.su
   <script defer src="/scripts/searchManager.js" is:inline></script>
   <script defer src="/scripts/accordionManager.js" is:inline></script>
 </body>
+</html>

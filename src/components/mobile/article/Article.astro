@@ -32,7 +32,6 @@ const { category, msid, app, pageTarget } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
 const ads = app?.response?.ads;
 ---
-
 <WebPageSchema data={mainData} pathname={getUrl(mainData)} />
 <NewsArticleSchema data={mainData} pathname={getUrl(mainData)} />
 <ContainerBox inLineStyle={{ marginBottom: "7px" }}>
@@ -74,6 +73,7 @@ const ads = app?.response?.ads;
   type={"TOP_SHARE_ICONS"}
   time={processReadingTime(mainData)}
   mainData={mainData}
+  client:idle
 />
 <AdContainer
   inLineStyle={{ width: "300px", minHeight: "250px", marginBottom: "16px" }}
@@ -128,6 +128,7 @@ const ads = app?.response?.ads;
     mainData={mainData}
     type={"BOTTOM_SHARE_ICONS"}
     followus="ET_HINDI"
+    client:idle
   />
   <SubscribeWithEmail />
 </div>
