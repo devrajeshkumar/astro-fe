@@ -14,9 +14,29 @@ import RenderEmbeds from "@components/common/renderEmbeds/RenderEmbedsDesktop.as
 import AdContainer from "@components/common/adcontainer/AdContainer.astro";
 import HdfcCard from "@components/common/hdfcCard/HdfcCard.astro";
 import SubscribeWithEmail from "@components/common/subscribeWithEmail/SubscribeWithEmail.astro";
+import OneLiner from "@components/common/oneLiner/OneLiner.astro";
 const { category, msid, app, pageTarget } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
 const ads = app?.response?.ads;
+let isIndex3 = true,
+  isIndex4 = true;
+mainData?.embedData?.forEach((item) => {
+  if (item.adsIndex === 3) {
+    if (isIndex3) {
+      isIndex3 = false;
+    } else {
+      item.adsIndex =-1;
+    }
+  }
+  if (item.adsIndex === 4) {
+    if (isIndex4) {
+      isIndex4 = false;
+    } else {
+      item.adsIndex = -1;
+    }
+  }
+});
+
 ---
 
 <WebPageSchema data={mainData} pathname={getUrl(mainData)} />
@@ -49,6 +69,7 @@ const ads = app?.response?.ads;
           />
         ))
       }
+      <OneLiner/>
     </div>
     <div class={style.article} slot="rhs">
       <AdContainer> ads </AdContainer>
