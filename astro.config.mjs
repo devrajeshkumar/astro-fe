@@ -28,26 +28,7 @@ const config = {
   server: {
     port: 3000,
   },
-  compilerOptions: {
-    baseUrl: ".",
-    paths: {
-      "@components/*": ["src/components/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@utils/*": ["src/utils/*"],
-      "@constant/*": ["src/constant/*"],
-      "@styles/*": ["src/styles/*"],
-    },
-  },
   vite: {
-    resolve: {
-      alias: {
-        "@components": path.resolve(__dirname, "src/components"),
-        "@layouts": path.resolve(__dirname, "src/layouts"),
-        "@utils": path.resolve(__dirname, "src/utils"),
-        "@constant": path.resolve(__dirname, "src/constant"),
-        "@styles": path.resolve(__dirname, "src/styles"),
-      },
-    },
     css: {
       modules: {
         generateScopedName: isProd
