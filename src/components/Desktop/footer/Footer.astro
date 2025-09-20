@@ -6,7 +6,7 @@ import SvgIcon from "@components/common/svg/SvgIcon.astro";
 import CONST from "@constant/index";
 
 const response = await fetch(
-  `https://apihindi.etnownews.com/request/footer?channel_id=386`
+  `https://apihindi.etnownews.com/request/footer?channel_id=386`,
 );
 
 const data = await response.json();
@@ -37,12 +37,12 @@ const footerCompanyMenu = data?.response?.[0]?.data;
       <Typography
         tag="p"
         text={`${readMore}`}
-        changeStyle="font-size-12"
+        changeStyle="font-size-14"
         fontWeight="400"
         isLineClamp={false}
         isWhiteLayout={true}
         inLineStyle={{
-          lineHeight: "20px",
+          lineHeight: "1.83",
           color: "hsla(0,0%,100%,.75)",
           marginBottom: "15px",
         }}
@@ -134,23 +134,31 @@ const footerCompanyMenu = data?.response?.[0]?.data;
         </a>
       </li>
       {
-        assetMngComp?.children?.map(({ title, overridelink } : { title: string; overridelink: string }) => (
-          <li>
-            <a href={overridelink}>
-              <Typography
-                tag="p"
-                text={`${title}`}
-                changeStyle={"font-size-12"}
-                fontWeight="400"
-                isLineClamp={false}
-                isWhiteLayout={true}
-                inLineStyle={{
-                  lineHeight: "1",
-                }}
-              />
-            </a>
-          </li>
-        ))
+        assetMngComp?.children?.map(
+          ({
+            title,
+            overridelink,
+          }: {
+            title: string;
+            overridelink: string;
+          }) => (
+            <li>
+              <a href={overridelink}>
+                <Typography
+                  tag="p"
+                  text={`${title}`}
+                  changeStyle={"font-size-12"}
+                  fontWeight="400"
+                  isLineClamp={false}
+                  isWhiteLayout={true}
+                  inLineStyle={{
+                    lineHeight: "1",
+                  }}
+                />
+              </a>
+            </li>
+          ),
+        )
       }
     </ul>
 
@@ -256,49 +264,51 @@ const footerCompanyMenu = data?.response?.[0]?.data;
       }
     </div>
 
-    <div class={style["footer-menu"]}>
-      {
-        (
-          <div id={`footerLatestMenu`}>
-            <Typography
-              tag="h4"
-              text={"Latest Stories"}
-              changeStyle="font-size-16"
-              fontWeight="700"
-              isLineClamp={false}
-              isWhiteLayout={true}
-              inLineStyle={{
-                lineHeight: "1",
-                marginBottom: "16px",
-              }}
-            />
-            <ul
-              class={`${style["footer-menu-list"]} ${style["footer-menu-list-2"]}`}
-            >
-              {footerLatestMenu?.children.map((item) => (
-                <li id={`${item?.id}-latest-stories`}>
-                  <a href={item?.url}>
-                    <Typography
-                      tag="p"
-                      text={item?.title}
-                      changeStyle="font-size-12"
-                      fontWeight="400"
-                      isLineClamp={false}
-                      isWhiteLayout={true}
-                      inLineStyle={{
-                        lineHeight: "1.56",
-                        color: "hsla(0,0%,100%,.75)",
-                        display: "inline-block",
-                      }}
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
-      }
-    </div>
+    {
+      footerLatestMenu?.length > 0 && (
+        <div class={style["footer-menu"]}>
+          {
+            <div id={`footerLatestMenu`}>
+              <Typography
+                tag="h4"
+                text={"Latest Stories"}
+                changeStyle="font-size-16"
+                fontWeight="700"
+                isLineClamp={false}
+                isWhiteLayout={true}
+                inLineStyle={{
+                  lineHeight: "1",
+                  marginBottom: "16px",
+                }}
+              />
+              <ul
+                class={`${style["footer-menu-list"]} ${style["footer-menu-list-2"]}`}
+              >
+                {footerLatestMenu?.children.map((item) => (
+                  <li id={`${item?.id}-latest-stories`}>
+                    <a href={item?.url}>
+                      <Typography
+                        tag="p"
+                        text={item?.title}
+                        changeStyle="font-size-12"
+                        fontWeight="400"
+                        isLineClamp={false}
+                        isWhiteLayout={true}
+                        inLineStyle={{
+                          lineHeight: "1.56",
+                          color: "hsla(0,0%,100%,.75)",
+                          display: "inline-block",
+                        }}
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          }
+        </div>
+      )
+    }
 
     <div class={style["footer-menu"]}>
       {
@@ -353,7 +363,7 @@ const footerCompanyMenu = data?.response?.[0]?.data;
     <Typography
       tag={"p"}
       text={`© ${new Date().getFullYear()} Bennett, Coleman & Company Limited`}
-      changeStyle={"font-size-12"}
+      changeStyle={"font-size-14"}
       isLineClamp={false}
       isWhiteLayout={true}
       inLineStyle={{}}

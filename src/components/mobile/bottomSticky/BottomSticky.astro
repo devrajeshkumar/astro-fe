@@ -7,7 +7,7 @@ import AdContainer from "@components/common/adcontainer/AdContainer.astro";
 import { BOTTOMNAV } from "@constant/index";
 import AdCaller from "@components/common/adcaller/AdCaller.astro";
 
-const {stickyAds = {} } = Astro.props;
+const {stickyAds = {}, pageTarget } = Astro.props;
 const values = Astro.url.searchParams;
 const pathname = Astro.url.pathname;
 const category = values.get("category");
@@ -34,7 +34,7 @@ bottomNav = bottomNav.map((item) => {
             height: "52px",
         }}
     >
-        <AdCaller {...stickyAds} />
+        <AdCaller class=".dfp" {...stickyAds} pageTarget={pageTarget} />
     </AdContainer>
     <div class={`${style["bottom-sticky"]}`}>
         {

@@ -17,6 +17,11 @@
         align-items: center;
         justify-content: center;
         position: relative;
+
+        img {
+            width: 250px;
+            height: 28px;
+        }
     }
 
     &-main-nav {

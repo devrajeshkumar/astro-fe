@@ -6,6 +6,8 @@ import DotsMenuIcon from "@components/common/widgets/dotsMenuIcon/DotsMenuIcon.a
 import MegaDropDownBox from "@components/common/wrappers/megaDropDownBox/MegaDropDownBox.astro";
 import Search from "@components/common/search/Search.astro";
 import Hamburger from "@components/desktop/hamburger/Hamburger.astro";
+import Link from "@components/common/link/Link.astro";
+import LazyImage from "@components/common/lazyImage/LazyImage.astro";
 
 const {
   changeStyle = "",
@@ -25,13 +27,13 @@ const {
     style={inLineStyle}
   >
     <li class={`${style["disable"]}`}>
-      <a
-        href="#"
+      <Link
+        link={'/'}
         title=""
-        class={`${style["nav-link"]} ${style["nav-link-home"]}`}
+        className={`${style["nav-link"]} ${style["nav-link-home"]}`}
       >
         <span><SvgIcon IconName={"HomeIcon"} width={17} height={16} /></span>
-      </a>
+      </Link>
     </li>
 
     {
@@ -48,16 +50,16 @@ const {
           <li
             class={`${child && child.length > 0 && style["rightArrow"]} ${style["disable"]}`}
           >
-            <a
-              href={seopath}
+            <Link
+              link={seopath}
               title={title}
               target="_blank"
-              class={`${style["nav-link"]} ${pageTarget.category === seopath ? style["nav-active"] : ""}`}
+              className={`${style["nav-link"]} ${pageTarget.category === seopath ? style["nav-active"] : ""}`}
             >
               <Typography
                 tag="span"
                 text={title}
-                changeStyle="font-size-12"
+                changeStyle="font-size-16"
                 fontWeight="400"
                 isLineClamp={false}
                 inLineStyle={{
@@ -66,7 +68,7 @@ const {
                   whiteSpace: "nowrap",
                 }}
               />
-            </a>
+            </Link>
 
             {/* Render submenu if children exist */}
             {child && child.length > 0 && (
@@ -80,16 +82,16 @@ const {
                     title: string;
                   }) => (
                     <li>
-                      <a
-                        href={subHref}
+                      <Link
+                        link={subHref}
                         title={subTitle}
                         target="_blank"
-                        class={style["submenu-link"]}
+                        className={style["submenu-link"]}
                       >
                         <Typography
                           tag="span"
                           text={subTitle}
-                          changeStyle="font-size-12"
+                          changeStyle="font-size-16"
                           fontWeight="400"
                           isLineClamp={false}
                           inLineStyle={{
@@ -98,7 +100,7 @@ const {
                             whiteSpace: "nowrap",
                           }}
                         />
-                      </a>
+                      </Link>
                     </li>
                   )
                 )}
@@ -109,30 +111,27 @@ const {
       )
     }
 
-    <li class={`${style["nav-premium-list"]} ${style["disable"]}`}>
-      <a
-        href="#"
+    <!-- <li class={`${style["nav-premium-list"]} ${style["disable"]}`}>
+      <Link
+        link={'/'}
         title=""
-        class={`${style["nav-link"]} ${style["nav-premium"]}`}
+        className={`${style["nav-link"]} ${style["nav-premium"]}`}
       >
         <span>
           <img src="/assets/images/Premiumhead.svg" alt="Premium" />
         </span>
-      </a>
-    </li>
-    <li class={`${style["disable"]}`}>
-      <a
-        href="#"
+      </Link>
+    </li> -->
+    <li class={`${style["disable"]}`} style={{ marginLeft: "auto" }}>
+      <Link
+        link={'/'}
         title=""
-        class={`${style["nav-link"]} ${style["nav-mutual-fund"]}`}
+        className={`${style["nav-link"]} ${style["nav-mutual-fund"]}`}
       >
         <span>
-          <img
-            src="https://images.etnownews.com/photo/msid-118213542/118213542.jpg"
-            alt="Mutual Fund Sahi Hai"
-          />
+          <LazyImage datasrc={'https://images.etnownews.com/photo/msid-118213542/118213542.jpg'} alt={'Mutual Fund Sahi Hai'} />
         </span>
-      </a>
+      </Link>
     </li>
     <li>
       <button

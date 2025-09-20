@@ -57,20 +57,19 @@
     }
   }
 
-  &-menu {
-    display: block;
-    column-width: 205px;
-    column-gap: 15px;
-
-    border-top: 1px solid #00000069;
-    padding-top: 25px;
-    margin-bottom: 20px;
-  }
-
   &-menu,
   &-menu-list {
     gap: 10px 20px;
     justify-content: space-between;
+  }
+
+  &-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0px;
+    border-top: 1px solid #00000069;
+    padding-top: 25px;
+    margin-bottom: 20px;
   }
 
   &-menu-list {

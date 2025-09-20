@@ -1,11 +1,12 @@
 ---
+import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import style from "./TextLinkComponent.module.scss";
 import SvgIcon from "@components/common/svg/SvgIcon.astro";
 const { htmlText, iconType } = Astro.props;
 if (!iconType) return null;
 ---
 
-<div class={style["container"]}>
+<ContainerBox>
   <div class={`${style["youtube_cover"]} ${style["d-flex"]}`}>
     {
       iconType == "media-video" && (
@@ -16,4 +17,4 @@ if (!iconType) return null;
     }
     <div class={style["article-paragraph"]} set:html={htmlText} />
   </div>
-</div>
+</ContainerBox>

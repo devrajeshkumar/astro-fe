@@ -82,9 +82,11 @@ const section = `${pageTarget?.section?.category ?? ''}${pageTarget?.section?.su
     ))
   }
 
+  <script defer src="https://watch.sociofyme.com/timescdp/cdtrk.js"></script>
+
   <!-- <script id="gtagScript" set:html={gaScript} defer async is:inline /> -->
 
-  <script id="ga4Script" set:html={ga4Script} defer async is:inline />
+  <script id="ga4Script" set:html={ga4Script} defer />
 
   <script src="/scripts/adManager.js" defer is:inline></script>
   <script src="/scripts/adSystem.js" defer is:inline></script>
@@ -126,8 +128,6 @@ const section = `${pageTarget?.section?.category ?? ''}${pageTarget?.section?.su
     defer
     type="text/javascript"
     src={`https://watch.sociofyme.com/player/prod/sociofymeloader.js`}></script>
-
-  <script async src="https://watch.sociofyme.com/timescdp/cdtrk.js"></script>
 
   <link rel="dns-prefetch" href="https://securepubads.g.doubleclick.net" />
   <link rel="dns-prefetch" href="https://images.etnownews.com" />

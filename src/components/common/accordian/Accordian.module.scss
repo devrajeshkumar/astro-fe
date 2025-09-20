@@ -1,7 +1,6 @@
 .accordion {
   overflow: hidden;
   transition: all 0.3s ease;
-  border-radius: 8px;
 
   &-header {
     padding: 0;
@@ -15,11 +14,6 @@
 
     > * {
       padding-right: 20px;
-    }
-
-    &:focus-within {
-      outline: 2px solid #007acc;
-      outline-offset: 2px;
     }
   }
 
@@ -35,26 +29,20 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: all 0.2s ease;
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     flex-shrink: 0;
 
+    svg {
+      transform: rotate(0deg);
+      transition: all 0.2s ease;
+    }
+
     &.toggle-left {
-      left: -10px;
+      left: -25px;
     }
 
     &.toggle-right {
-      right: -10px;
-    }
-
-    .icon-close {
-      display: none;
-    }
-
-    .icon-plus {
-      display: block;
+      right: -25px;
     }
   }
 
@@ -70,24 +58,18 @@
 
   &-body {
     padding: 0;
-    margin-top: 16px;
+    margin-top: 10px;
   }
 
   &.open {
     .accordion-toggle {
-      transform: translateY(-50%) rotate(45deg);
-
-      .icon-close {
-        display: block;
-      }
-
-      .icon-plus {
-        display: none;
+      svg {
+        transform: rotate(90deg);
       }
     }
 
     .accordion-content {
-      max-height: 1000px; // Adjust based on your content
+      max-height: auto; // Adjust based on your content
       overflow: visible;
     }
   }
@@ -97,37 +79,6 @@
     .accordion-content {
       max-height: 0;
       overflow: hidden;
-    }
-  }
-
-  // Dark mode support
-  &.dark-layout {
-    background-color: #1a1a1a;
-    color: #ffffff;
-
-    .accordion-toggle {
-      color: #ffffff;
-      
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-    }
-  }
-
-  // Custom animation durations
-  &.fast {
-    transition: all 0.15s ease;
-    
-    .accordion-content {
-      transition: max-height 0.15s ease;
-    }
-  }
-
-  &.slow {
-    transition: all 0.5s ease;
-    
-    .accordion-content {
-      transition: max-height 0.5s ease;
     }
   }
 
@@ -141,17 +92,6 @@
     
     .accordion-toggle {
       transition: none;
-    }
-  }
-}
-
-// Multiple accordion container
-.accordion-group {
-  .accordion {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    
-    &:last-child {
-      border-bottom: none;
     }
   }
 }

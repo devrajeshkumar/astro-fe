@@ -3,84 +3,37 @@ import style from "./TitleComponent.module.scss";
 import dayjs from "dayjs";
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import Typography from "@components/common/widgets/typography/Typography.astro";
-const { index, mainData, premium = false, updatedate } = Astro.props;
+const { index, mainData, updatedate } = Astro.props;
 ---
 
-{
-  premium ? (
-    <div class={`${style["PremiumTop"]}`}>
-      <i class={`${style["PremiumTag"]}`}>
-        <Typography
-          tag="span"
-          text={"Premium"}
-          changeStyle={"font-size-16"}
-          fontWeight={"700"}
-          isLineClamp={false}
-          isWhiteLayout={false}
-          inLineStyle={{
-            fontStyle: "italic",
-            fontFamily: "var(--fontFamilyPlayfair)",
-            lineHeight: "1.3",
-          }}
-        />
-      </i>
-      {updatedate && (
-        <Typography
-          tag="span"
-          text={" Updated "}
-          changeStyle={"font-size-12"}
-          isLineClamp={false}
-          isWhiteLayout={false}
-          inLineStyle={{
-            fontFamily: "var(--fontFamilyVerdana)",
-          }}
-        />
-      )}
+<ContainerBox>
+  {
+    index == 0 ? (
       <Typography
         tag="h1"
         text={mainData.title}
-        changeStyle={"font-size-24"}
+        changeStyle={"font-size-26"}
+        isLineClamp={false}
+        isWhiteLayout={false}
+        inLineStyle={{
+          fontWeight: "900",
+          lineHeight: "1.385",
+          marginBottom: "12px",
+        }}
+      />
+    ) : (
+      <Typography
+        tag="h4"
+        text={mainData.title}
+        changeStyle={"font-size-18"}
         fontWeight={"700"}
         isLineClamp={false}
         isWhiteLayout={false}
         inLineStyle={{
-          fontFamily: "var(--fontFamilyPlayfair)",
-          lineHeight: "40px",
-          textAlign: "left",
-          color: "rgba(0, 0, 0, 1)",
-          marginBottom: "0px",
+          lineHeight: "1.5",
+          marginBottom: "13px",
         }}
       />
-    </div>
-  ) : (
-    <ContainerBox>
-      {index == 0 ? (
-        <Typography
-          tag="h1"
-          text={mainData.title}
-          changeStyle={"font-size-26"}
-          isLineClamp={false}
-          isWhiteLayout={false}
-          inLineStyle={{
-            fontWeight: "900",
-            lineHeight: "1.385",
-            marginBottom: "12px",
-          }}
-        />
-      ) : (
-        <Typography
-          tag="h4"
-          text={mainData.title}
-          changeStyle={"font-size-18"}
-          fontWeight={"700"}
-          isLineClamp={false}
-          isWhiteLayout={false}
-          inLineStyle={{
-            lineHeight: "1.5",
-            marginBottom: "13px",
-          }}
-        />
-      )}
-    </ContainerBox>
-  )
-}
+    )
+  }
+</ContainerBox>

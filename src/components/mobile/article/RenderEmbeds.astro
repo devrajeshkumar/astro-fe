@@ -17,8 +17,9 @@ import CoverVDOAndImg from "./CoverVDOAndImg.astro";
 import style from "./Article.module.scss";
 import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
 import VideoSlideList from "@components/common/videoSlideList/VideoSlideList.astro";
+import CONST from "@constant/index";
 
-const { embedData, dataIndex, mainData, app, msid } = Astro.props;
+const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
 ---
 
 <div
@@ -139,18 +140,20 @@ const { embedData, dataIndex, mainData, app, msid } = Astro.props;
           margin: "16px auto",
         }}
       >
-        <AdCaller {...embedData?.ad} />
+        <AdCaller {...embedData?.ad} pageTarget={pageTarget} />
       </AdContainer>
     )
   }
 
   {
     embedData.isMGIDShow && (
-      <MgIdComponent
-        scriptID="MGID_ADD_1X1"
-        elementID="MGID_ADD_1X1"
-        lazy={true}
-      />
+      <ContainerBox>
+        <MgIdComponent
+          scriptID={CONST.MGID_ADD_1X1_HI}
+          elementID={CONST.MGID_ADD_1X1_HI}
+          lazy={true}
+        />
+      </ContainerBox>
     )
   }
 

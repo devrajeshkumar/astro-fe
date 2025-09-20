@@ -23,10 +23,12 @@ import SubscribeWithEmail from "@components/common/subscribeWithEmail/SubscribeW
 import WebPageSchema from "@components/common/seo/schema/WebPageSchema.astro";
 import NewsArticleSchema from "@components/common/seo/schema/NewsArticleSchema.astro";
 import style from "./Article.module.scss";
-import RenderEmbeds from "./RenderEmbeds.astro"
+import RenderEmbeds from "./RenderEmbeds.astro";
 import TopVideos from "@components/common/topVideos/TopVideos.astro";
+import Typography from "@components/common/widgets/typography/Typography.astro";
+import EndOfArticle from "@components/common/endOfArticle/EndOfArticle.astro";
 
-const { category, msid, app , pageTarget } = Astro.props;
+const { category, msid, app, pageTarget } = Astro.props;
 const mainData = app?.response?.sections?.article_show?.data?.[0];
 const ads = app?.response?.ads;
 ---
@@ -76,7 +78,7 @@ const ads = app?.response?.ads;
 <AdContainer
   inLineStyle={{ width: "300px", minHeight: "250px", marginBottom: "16px" }}
 >
-  <AdCaller {...app?.response?.ads?.atf} atf={true} pageTarget={pageTarget} />
+  <AdCaller class=".dfp" {...app?.response?.ads?.atf} atf={true} pageTarget={pageTarget} />
 </AdContainer>
 {
   mainData?.summary ? (
@@ -90,17 +92,19 @@ const ads = app?.response?.ads;
     </Fragment>
   ) : null
 }
- 
-  {mainData?.embedData?.map((embedData, dataIndex) => (
-  <RenderEmbeds
-    embedData={embedData}
-    dataIndex={dataIndex}
-    mainData={mainData}
-    app={app}
-    msid={msid}
-    pageTarget={pageTarget}
-  />
-))}
+
+{
+  mainData?.embedData?.map((embedData, dataIndex) => (
+    <RenderEmbeds
+      embedData={embedData}
+      dataIndex={dataIndex}
+      mainData={mainData}
+      app={app}
+      msid={msid}
+      pageTarget={pageTarget}
+    />
+  ))
+}
 
 <div class={`collapsed ${style["collapsed"]}`}>
   <AdContainer
@@ -114,6 +118,9 @@ const ads = app?.response?.ads;
   </AdContainer>
   <KeywordTags data={mainData} isArticleShow={true} />
   <OneLiner />
+
+  <EndOfArticle text="आर्टिकल की समाप्ति" />
+
   <BreadCrumb isWrap={true} category="news" />
   <RelatedNews data={mainData?.editorpicks} />
   <TopVideos componentData={mainData?.rhs_widget} />
@@ -124,11 +131,22 @@ const ads = app?.response?.ads;
   />
   <SubscribeWithEmail />
 </div>
-<MgIdComponent
-  scriptID={CONST.MGID_ADD_5X5}
-  elementID={CONST.MGID_ADD_5X5}
-  lazy={true}
-/>
+<ContainerBox
+  inLineStyle={{
+    marginTop: "20px",
+    borderTop: "16px solid #F4F4F4",
+    paddingTop: "20px",
+  }}
+>
+  <MgIdComponent
+    scriptID={CONST.MGID_ADD_5X5_HI}
+    elementID={CONST.MGID_ADD_5X5_HI}
+    lazy={true}
+  />
+</ContainerBox>
+
+<EndOfArticle text="End of Feed" />
+
 <LatestNews data={mainData?.latestSiblings} />
 
 <script define:vars={{ style }}>
@@ -138,7 +156,7 @@ const ads = app?.response?.ads;
     readMoreButton?.addEventListener("click", () => {
       const paras = document.querySelectorAll(`.${style["collapsed"]}`);
       const clipedPara = document.querySelector(`.${style["clipped-para"]}`);
-      clipedPara.classList.remove(style["clipped-para"])
+      clipedPara.classList.remove(style["clipped-para"]);
       paras?.forEach((element) => element.classList.remove(style["collapsed"]));
       readMoreDiv.style.display = "none";
       readMoreDiv.style.height = "0px";

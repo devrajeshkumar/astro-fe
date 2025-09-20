@@ -2,6 +2,7 @@
 import { NAVIGATION_GROUPS } from "@utils/common";
 import style from "./Hamburger.module.scss";
 import SvgIcon from "@components/common/svg/SvgIcon.astro";
+import Link from "@components/common/link/Link.astro";
 
 // Menu data structure
 const menuData = NAVIGATION_GROUPS;
@@ -40,17 +41,17 @@ function groupMenuData(flatData) {
         <ul class={style.subMenu}>
           {category.items.map((item) => (
             <li class={style.subMenuItem}>
-              <a href={item.seopath} class={style.subMenuLink}>
+              <Link link={item.seopath} className={style.subMenuLink}>
                 {item.title}
-              </a>
+              </Link>
               {
                 item?.child?.length > 0 && (
                   <ul class={style.subMenu}>
                     {item?.child?.map((child) => (
                       <li class={style.subMenuItem}>
-                        <a href={child.seopath} class={style.subMenuLink}>
+                        <Link link={child.seopath} className={style.subMenuLink}>
                           {child.title}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

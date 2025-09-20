@@ -3,6 +3,8 @@ import style from "./Header.module.scss";
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import TopNavigation from "../topNavigation/TopNavigation.astro";
 import Navigation from "../navigation/Navigation.astro";
+import LazyImage from "@components/common/lazyImage/LazyImage.astro";
+import Link from "@components/common/link/Link.astro";
 
 const navData = await fetch("https://apihindi.etnownews.com/api/getnavigation?msid=ALL&channel_id=386");
 const navDataJson = await navData.json();
@@ -17,9 +19,9 @@ const { pageTarget } = Astro.props;
   </div>
   <ContainerBox>
     <div class={`${style['header-logo']}`}>
-        <a href="#" class={`${style['header-logo']}`}>
-            <img src="/assets/images/logo-large.svg" alt="ET Now" />
-        </a>
+        <Link link={"/"} className={`${style['header-logo']}`}>
+            <LazyImage datasrc={'/assets/images/ET-Now-desktop-logo.svg'} alt={'ET Now Swadesh'} />
+        </Link>
     </div>
   </ContainerBox>
   <div class={`${style["header-main-nav"]}`}>

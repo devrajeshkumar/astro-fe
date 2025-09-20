@@ -1,0 +1,19 @@
+.video-box {
+    background-color: #f3f3f5;
+    outline: 1px solid var(--adsBgColor);
+    outline-offset: -1px;
+    position: relative;
+    padding: 15px 0px 6px 0px;
+    margin: 21px 22px 18px 23px;
+
+    &:empty {
+        display: none;
+    }
+}
+
+@include mobile {
+    .video-box {
+        margin: 21px 0px 18px 0px;
+        z-index: 10;
+    }
+}

@@ -1,0 +1,26 @@
+.endOfArticle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    opacity: 0.9;
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    &::after,
+    &::before {
+        content: '';
+        width: 68px;
+        height: 1px;
+        background: #b4b4b4;
+        opacity: 0.2;
+    }
+
+    &::before {
+        margin-right: 10px;
+    }
+
+    &::after {
+        margin-left: 10px;
+    }
+}

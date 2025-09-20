@@ -1,4 +1,5 @@
 ---
+import ContainerBox from "../wrappers/containerBox/ContainerBox.astro";
 import style from "./YoutubeEmbed.module.scss";
 import SvgIcon from "@components/common/svg/SvgIcon.astro";
 const { html_tag_attributes, type } = Astro.props;
@@ -17,7 +18,7 @@ if (!html_tag_attributes) return null;
       />
     </div>
   ) : (
-    <div class={style["container"]}>
+    <ContainerBox>
       <div class={`${style["youtube_cover"]} ${style["d-flex"]}`}>
         <div class={style["youtubeicon"]}>
           <SvgIcon IconName="YoutubeIcon" />
@@ -29,6 +30,6 @@ if (!html_tag_attributes) return null;
           {html_tag_attributes?.title}
         </a>
       </div>
-    </div>
+    </ContainerBox>
   )
 }

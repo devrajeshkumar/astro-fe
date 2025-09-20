@@ -1,0 +1,19 @@
+---
+import _get from "lodash/get";
+import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
+import LhsRhsWrapper from "@components/common/wrappers/lhsRhsWrapper/LhsRhsWrapper.astro";
+import style from "./Article.module.scss";
+---
+
+<ContainerBox>
+<LhsRhsWrapper>
+  <div class={style.article} slot="mid">
+    LHS goes here
+  </div>
+  <div class={style.article} slot="rhs">
+    RHS goes here
+  </div>
+</LhsRhsWrapper>
+</ContainerBox>
+
+
