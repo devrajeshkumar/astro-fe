@@ -1,10 +1,10 @@
 ---
 import Popup from "@components/common/popup/Popup.astro";
-import MainLayout from "../layouts/MainLayout.astro";
+import MainLayout from "@layouts/MainLayout.astro";
 import Search from "@components/common/search/Search.astro";
-import { setPageTargetData } from "../utils/common";
+import { setPageTargetData } from "@utils/common";
 import _get from "lodash/get";
-import { getDomain } from "../utils/common";
+import { getDomain } from "@utils/common";
 
 const values = Astro.url.searchParams;
 const msid = values.get("id");
