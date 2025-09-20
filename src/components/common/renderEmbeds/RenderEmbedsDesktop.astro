@@ -2,19 +2,19 @@
 import ContainerBox from "@components/common/wrappers/containerBox/ContainerBox.astro";
 import SocialWidgets from "@components/common/embeds/SocialWidgets.astro";
 import GetPollUI from "@components/common/poll/GetPollUI.astro";
-import TextLinkComponent from "./TextLinkComponent.astro";
+import TextLinkComponent from "@components/mobile/article/TextLinkComponent.astro";
 import YoutubeEmbed from "@components/common/youtubeEmbed/YoutubeEmbed.astro";
 import MultiVideoPlayer from "@components/reactComponents/multiVideoPlayer/MultiVideoPlayer";
 import QuotesWidget from "@components/common/widgets/htmlQuotes/QuotesWidget.astro";
 import RecommendedNews from "@components/common/recommendedNews/RecommendedNews.astro";
 import PhotoSlideList from "@components/common/photoSlideList/PhotoSlideList.astro";
-import HtmlParagraph from "./HtmlParagraph.astro";
+import HtmlParagraph from "@components/mobile/article/HtmlParagraph.astro";
 import AdContainer from "@components/common/adcontainer/AdContainer.astro";
 import AdCaller from "@components/common/adcaller/AdCaller.astro";
 import MgIdComponent from "@components/common/mgid/MgIdComponent.astro";
 import VideoAiComponent from "@components/common/mgid/VideoAiComponent.astro";
-import CoverVDOAndImg from "./CoverVDOAndImg.astro";
-import style from "./Article.module.scss";
+import CoverVDOAndImg from "@components/mobile/article/CoverVDOAndImg.astro";
+import style from "@components/mobile/article/Article.module.scss";
 import LazyLoad from "@components/common/lazyload/LazyLoad.astro";
 import VideoSlideList from "@components/common/videoSlideList/VideoSlideList.astro";
 import CONST from "@constant/index";
@@ -34,6 +34,8 @@ const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
     aList={[mainData]}
     MULTI_VIDEO_LIST_COUNT={1}
   />
+
+  <PhotoSlideList data={embedData?.photoType?.list} />
 
   <ContainerBox>
     {
@@ -80,6 +82,14 @@ const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
       )
     }
     {
+      embedData?.youtubeList && (
+        <YoutubeEmbed
+          html_tag_attributes={embedData?.youtubeList}
+          type="WITH_THUMB"
+        />
+      )
+    }
+    {
       embedData?.pollUI && (
         <LazyLoad strategy="viewport">
           <GetPollUI items={embedData.pollUI} data={mainData?.cmsembed} />
@@ -87,18 +97,27 @@ const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
       )
     }
   </ContainerBox>
-
+  <HtmlParagraph
+    htmlText={embedData.htmlText
+      ? embedData.htmlText.replace(/(<!\[CDATA\[)/gm, "").replace(/(]]>)/gm, "")
+      : ""}
+    firstPara={embedData.paraLength == 1 && embedData?.ispara}
+  />
   <TextLinkComponent
     htmlText={embedData.htmlText}
     iconType={embedData.iconType}
   />
+  {embedData.adsIndex == 4 && <VideoAiComponent loadOnScroll={true} />}
 
   {
-    embedData?.youtubeList && (
-      <YoutubeEmbed
-        html_tag_attributes={embedData?.youtubeList}
-        type="WITH_THUMB"
-      />
+    embedData.adsIndex == 3 && (
+      <ContainerBox>
+        <MgIdComponent
+          scriptID={CONST.MGID_ADD_1X1_HI}
+          elementID={CONST.MGID_ADD_1X1_HI}
+          lazy={true}
+        />
+      </ContainerBox>
     )
   }
 
@@ -122,14 +141,6 @@ const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
 
   <QuotesWidget data={embedData.htmlQuote} />
   <RecommendedNews data={embedData?.embedArticle} />
-  <PhotoSlideList data={embedData?.photoType?.list} />
-
-  <HtmlParagraph
-    htmlText={embedData.htmlText
-      ? embedData.htmlText.replace(/(<!\[CDATA\[)/gm, "").replace(/(]]>)/gm, "")
-      : ""}
-    firstPara={embedData.paraLength == 1 && embedData?.ispara}
-  />
 
   {
     embedData?.ad && (
@@ -144,20 +155,6 @@ const { embedData, dataIndex, mainData, app, msid, pageTarget } = Astro.props;
       </AdContainer>
     )
   }
-
-  {
-    embedData.isMGIDShow && (
-      <ContainerBox>
-        <MgIdComponent
-          scriptID={CONST.MGID_ADD_1X1_HI}
-          elementID={CONST.MGID_ADD_1X1_HI}
-          lazy={true}
-        />
-      </ContainerBox>
-    )
-  }
-
-  {embedData?.isVDOAiShow && <VideoAiComponent loadOnScroll={true} />}
 
   {
     dataIndex == 0 && !mainData.summary && (

@@ -80,7 +80,7 @@ const imageAmp = {
 };
 const logo = {
   "@type": "ImageObject",
-  url: `${process.env.PUBLIC_PHOTO_API}/photo/msid-${ET_HINDI_LOGO_MSID}/${ET_HINDI_LOGO_MSID}.jpg`,
+  url: `${import.meta.env.PUBLIC_PHOTO_API}/photo/msid-${ET_HINDI_LOGO_MSID}/${ET_HINDI_LOGO_MSID}.jpg`,
   width: 600,
   height: 60,
 };
@@ -148,9 +148,7 @@ if (data?.cmstype == "ARTICLE" || data?.cmstype == "MOVIEREVIEW") {
 
 let url;
 const mainEntity = (url =
-  data && data?.overridelink
-    ? `${data?.overridelink}`
-    : getDomain() + pathname);
+  data && data?.overridelink ? `${data?.overridelink}` : pathname);
 const keywords =
   data && data.keywords && data.keywords.length > 0 ? data.keywords : [];
 const jsonListKeywords = keywords.reduce((result, item) => {

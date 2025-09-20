@@ -12,7 +12,9 @@ const isMobileView = values.get("isMobileView");
 
 const articleData = await fetch(
   `https://apihindi.etnownews.com/request/articleshow?origin=${isMobileView === "true" ? "mobile" : "desktop"}&msid=${msid}&channel_id=386`
+
 );
+console.log("api is ", `https://apihindi.etnownews.com/request/articleshow?origin=${isMobileView === "true" ? "mobile" : "desktop"}&msid=${msid}&channel_id=386`)
 const app = await articleData.json();
 let seoObj = {};
 const articleShowObj = _get(

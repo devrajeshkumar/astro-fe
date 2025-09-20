@@ -20,7 +20,7 @@ const testUrl = new RegExp(isValidUrlRegex);
 const url =
   data && data?.overridelink && testUrl.test(data?.overridelink)
     ? `${data?.overridelink}`
-    : getDomain() + pathname;
+    : pathname;
 const keywords =
   data && data.keywords && data.keywords.length > 0 ? data.keywords : [];
 let jsonListKeywords = "";
